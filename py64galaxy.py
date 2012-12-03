@@ -24,4 +24,7 @@ while True: # main game loop
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+        elif event.type == pygame.KEYUP:
+            if(event.key == K_F1):
+                print 'start game here by prompting for number of players'
     pygame.display.update()
