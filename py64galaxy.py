@@ -17,6 +17,8 @@ startText = startFont.render('F1 - Start Single Player Game', True, LIGHTGRAY)
 startRect = startText.get_rect()
 startRect.center = (400, 200)
 
+numPlayers = 0
+
 while True: # main game loop
     DISPLAYSURF.blit(titleText, titleRect)
     DISPLAYSURF.blit(startText, startRect)
@@ -30,5 +32,7 @@ while True: # main game loop
                 playnumRect = playnumText.get_rect()
                 playnumRect.center = (400, 300)
                 DISPLAYSURF.blit(playnumText, playnumRect)
-                print 'start game here by prompting for number of players'
+            elif(event.key >= 49 and event.key <= 56):
+                numPlayers = (event.key - 48)
+                print "Now launch the next line of text questioning user for input."
     pygame.display.update()
