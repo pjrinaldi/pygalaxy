@@ -26,5 +26,9 @@ while True: # main game loop
             sys.exit()
         elif event.type == pygame.KEYUP:
             if(event.key == K_F1):
+                playnumText = startFont.render('Enter Number of Players (1-8):', True, LIGHTGRAY)
+                playnumRect = playnumText.get_rect()
+                playnumRect.center = (400, 300)
+                DISPLAYSURF.blit(playnumText, playnumRect)
                 print 'start game here by prompting for number of players'
     pygame.display.update()
