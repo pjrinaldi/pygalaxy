@@ -9,10 +9,18 @@ pygame.display.set_caption('Py64Galaxy')
 LIGHTGRAY= (235, 235, 235)
 BLACK = (0, 0, 0)
 
-titleFont = pygame.font.Font(pygame.font.match_font('freesans', False, False), 72) 
-titleText = titleFont.render('Python Galaxy', True, LIGHTGRAY)
+# titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/CA64v1.ttf', 72)
+# titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_User_v1.0-STYLE.ttf', 68) 
+# titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_User_Mono_v1.0-STYLE.ttf', 60) 
+titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 60) 
+titleText = titleFont.render('PYTHON GALAXY', True, LIGHTGRAY)
 titleRect = titleText.get_rect()
 titleRect.center = (400, 100)
+copyFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 18)
+copyText = copyFont.render('COPYRIGHT 2012 PASQUALE J RINALDI JR', True, LIGHTGRAY)
+copyRect = copyText.get_rect()
+copyRect.center = (400, 300)
+
 '''
 startFont = pygame.font.Font(pygame.font.match_font('freesans', False, False), 48)
 startText = startFont.render('F1 - Start Single Player Game', True, LIGHTGRAY)
@@ -28,7 +36,7 @@ buildShips = 0
 
 while True: # main game loop
     DISPLAYSURF.blit(titleText, titleRect)
-    #DISPLAYSURF.blit(startText, startRect)
+    DISPLAYSURF.blit(copyText, copyRect)
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
