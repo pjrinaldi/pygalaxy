@@ -18,7 +18,7 @@ def ask(screen, question):
     tmpRect = tmpText.get_rect()
     tmpRect.center = (400, 200)
     current_string = []
-    screen.blit(tmpText + " " + current_string, tmpRect)
+    screen.blit(tmpText, tmpRect)
     while 1:
         inkey = get_key()
         if inkey == K_BACKSPACE:
@@ -89,7 +89,6 @@ def main():
 #Display The Background
     screen.blit(background, (0, 0))
     pygame.display.flip()
-
 #Prepare Game Objects
     clock = pygame.time.Clock()
     # whiff_sound = load_sound('whiff.wav')
@@ -97,12 +96,13 @@ def main():
     # chimp = Chimp()
     # fist = Fist()
     # allsprites = pygame.sprite.RenderPlain((fist, chimp))
-    gameStart = 0
-    gameType = 0
+    gameStart = 1 # bypasses old and new game
+    gameType = 2 # sets it to a new game automatically
     numPlayers = 0
     comPlayers = 0
     numWorlds = 0
     buildShips = 0
+    LIGHTGRAY= (235, 235, 235)    
 
 #Main Loop
     while 1:
@@ -114,7 +114,31 @@ def main():
                 return
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 return
+            elif event.type == KEYUP:
+                if(gameStart == 1):
+                    if(gameType == 0):
+                        if(event.key == K_o):
+                            gameType = 1 # old game
+                            print 'old game'
+                        elif (event.key == K_n):
+                            gameType = 2 # new game
+                            print 'new game'
+                    if(gameType == 1):
+                        print 'figure out how to load an old game much later'
+                        
             elif event.type == MOUSEBUTTONDOWN:
+                if(gameStart == 0):
+                    gameStart = 1
+                    background.fill((0, 0, 0))
+                    if pygame.font:
+                        mainFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 12)
+                        text= mainFont.render('DO YOU WANT TO RETURN TO AN OLD GAME (O) OR START A NEW(N) ONE?', True, LIGHTGRAY)
+                        textRect = text.get_rect()
+                        textRect.center = (400, 200)
+                        background.blit(text, textRect)
+                        screen.blit(background, (0, 0))
+                elif(gameStart == 1):
+                    print 'capture and do nothing with - maybe pause later on'
                 '''
                 if fist.punch(chimp):
                     punch_sound.play() #punch
