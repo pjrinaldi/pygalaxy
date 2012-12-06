@@ -1,95 +1,9 @@
-import pygame, sys, string
+import pygame, os, sys, string
 from pygame.locals import *
 
-pygame.init()
-mainscreen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption('Py64Galaxy')
+if not pygame.font: print 'Warning, fonts disabled'
+if not pygame.mixer: print 'Warning, sound disabled'
 
-LIGHTGRAY= (235, 235, 235)
-BLACK = (0, 0, 0)
-gameClock = pygame.time.Clock()
-
-
-# titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/CA64v1.ttf', 72)
-# titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_User_v1.0-STYLE.ttf', 68) 
-# titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_User_Mono_v1.0-STYLE.ttf', 60) 
-titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 48) 
-copyFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 16)
-gameFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 12)
-titleText = titleFont.render('PYTHON GALAXY', True, LIGHTGRAY)
-titleRect = titleText.get_rect()
-titleRect.center = (400, 100)
-copyText = copyFont.render('COPYRIGHT 2012 PASQUALE J RINALDI JR', True, LIGHTGRAY)
-copyRect = copyText.get_rect()
-copyRect.center = (400, 300)
-
-gameStart = 0
-gameType = 0
-numPlayers = 0
-comPlayers = 0
-numWorlds = 0
-buildShips = 0
-
-while True:
-    mainscreen.blit(titleText, titleRect)
-    mainscreen.blit(copyText, copyRect)
-    pygame.display.flip()
-    
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-        if(event.type == pygame.KEYUP):
-            gameStart = 1
-            mainscreen.fill((0, 0, 0), None, 0)
-            answer = pygame.ask(mainscreen, "DO YOU WANT TO RETURN TO AN OLD GAME (O) OR START A NEW(N) ONE?")
-'''
-while True: # main game loop
-    # gameClock.tick(50)
-    mainscreen.blit(titleText, titleRect)
-    mainscreen.blit(copyText, copyRect)
-    # print gameStart
-    # pygame.display.update()
-    # pygame.time.wait(3000)
-    # mainscreen.fill((0, 0, 0), None, 0)
-    # pygame.display.update()
-    # gameText = gameFont.render('DO YOU WANT TO RETURN TO AN OLD GAME (O) OR START A NEW(N) ONE?', True, LIGHTGRAY)
-    # gameRect = gameText.get_rect()
-    # gameRect.center = (400, 200)
-    # mainscreen.blit(gameText, gameRect)
-    
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-        elif(gameStart == 0 and event.type == pygame.KEYUP):
-            gameStart = 1
-            mainscreen.fill((0, 0, 0), None, 0)
-            answer = inputbox.ask(mainscreen, "DO YOU WANT TO RETURN TO AN OLD GAME (O) OR START A NEW(N) ONE?")
-            print gameStart
-        elif event.type == pygame.KEYUP:
-            if(event.key == K_F1):
-                playnumText = startFont.render('Enter Number of Players (1-8):', True, LIGHTGRAY)
-                playnumRect = playnumText.get_rect()
-                playnumRect.center = (400, 300)
-                DISPLAYSURF.blit(playnumText, playnumRect)
-            if(numPlayers == 0):
-                if(event.key >= 49 and event.key <= 56):
-                    numPlayers = (event.key - 48)
-                    print "Now launch the next line of text questioning user for input."
-                    answer = inputbox.ask(DISPLAYSURF, "Number of Worlds (1-26):")
-                    #compnumText = startFont.render('Number of Computer Players (1-7):')
-            else:
-                if(event.key >= 49 and event.key <= 55):
-                    comPlayers = (event.key - 48)
-                    print "Computer players selected, number of worlds (1-26):"
-            if(comPlayers == 0):
-                print 'hi'
-                # if 1 then nested if 0-9
-                # if 2 then nested if 0-9
-                # or use the following code below
-    pygame.display.update()
-'''
 def  get_key():
     while 1:
         event = pygame.event.poll()
@@ -117,6 +31,102 @@ def ask(screen, question):
             current_string.append(chr(inkey))
             
             return string.join(current_string,"")
+
+def load_image(name, colorkey=None):
+    fullname = os.path.join('data', name)
+    try:
+        image = pygame.image.load(fullname)
+    except pygame.error, message:
+        print 'Cannot load image:', fullname
+        raise SystemExit, message
+    image = image.convert()
+    if colorkey is not None:
+        if colorkey is -1:
+            colorkey = image.get_at((0,0))
+        image.set_colorkey(colorkey, RLEACCEL)
+    return image, image.get_rect()
+
+def load_sound(name):
+    class NoneSound:
+        def play(self): pass
+    if not pygame.mixer or not pygame.mixer.get_init():
+        return NoneSound()
+    fullname = os.path.join('data', name)
+    try:
+        sound = pygame.mixer.Sound(fullname)
+    except pygame.error, message:
+        print 'Cannot load sound:', fullname
+        raise SystemExit, message
+    return sound
+
+
+def main():
+    """this function is called when the program starts.
+       it initializes everything it needs, then runs in
+       a loop until the function returns."""
+#Initialize Everything
+    pygame.init()
+    screen = pygame.display.set_mode((468, 60))
+    pygame.display.set_caption('Monkey Fever')
+    pygame.mouse.set_visible(0)
+
+#Create The Backgound
+    background = pygame.Surface(screen.get_size())
+    background = background.convert()
+    background.fill((250, 250, 250))
+
+#Put Text On The Background, Centered
+    if pygame.font:
+        font = pygame.font.Font(None, 36)
+        text = font.render("Pummel The Chimp, And Win $$$", 1, (10, 10, 10))
+        textpos = text.get_rect(centerx=background.get_width()/2)
+        background.blit(text, textpos)
+
+#Display The Background
+    screen.blit(background, (0, 0))
+    pygame.display.flip()
+
+#Prepare Game Objects
+    clock = pygame.time.Clock()
+    # whiff_sound = load_sound('whiff.wav')
+    # punch_sound = load_sound('punch.wav')
+    # chimp = Chimp()
+    # fist = Fist()
+    allsprites = pygame.sprite.RenderPlain((fist, chimp))
+
+#Main Loop
+    while 1:
+        clock.tick(60)
+
+    #Handle Input Events
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                return
+            elif event.type == MOUSEBUTTONDOWN:
+                if fist.punch(chimp):
+                    punch_sound.play() #punch
+                    chimp.punched()
+                else:
+                    whiff_sound.play() #miss
+            elif event.type is MOUSEBUTTONUP:
+                fist.unpunch()
+
+        allsprites.update()
+
+    #Draw Everything
+        screen.blit(background, (0, 0))
+        allsprites.draw(screen)
+        pygame.display.flip()
+
+#Game Over
+
+
+#this calls the 'main' function when this script is executed
+if __name__ == '__main__': main()
+
+
 '''
 #/usr/bin/env python
 """
@@ -304,4 +314,93 @@ def main():
 
 #this calls the 'main' function when this script is executed
 if __name__ == '__main__': main()
+'''
+'''
+pygame.init()
+mainscreen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption('Py64Galaxy')
+
+LIGHTGRAY= (235, 235, 235)
+BLACK = (0, 0, 0)
+gameClock = pygame.time.Clock()
+
+
+titleFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 48) 
+copyFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 16)
+gameFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 12)
+titleText = titleFont.render('PYTHON GALAXY', True, LIGHTGRAY)
+titleRect = titleText.get_rect()
+titleRect.center = (400, 100)
+copyText = copyFont.render('COPYRIGHT 2012 PASQUALE J RINALDI JR', True, LIGHTGRAY)
+copyRect = copyText.get_rect()
+copyRect.center = (400, 300)
+
+gameStart = 0
+gameType = 0
+numPlayers = 0
+comPlayers = 0
+numWorlds = 0
+buildShips = 0
+
+while True:
+    mainscreen.blit(titleText, titleRect)
+    mainscreen.blit(copyText, copyRect)
+    pygame.display.flip()
+    
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        if(event.type == pygame.KEYUP):
+            gameStart = 1
+            mainscreen.fill((0, 0, 0), None, 0)
+            answer = pygame.ask(mainscreen, "DO YOU WANT TO RETURN TO AN OLD GAME (O) OR START A NEW(N) ONE?")
+'''
+
+'''
+while True: # main game loop
+    # gameClock.tick(50)
+    mainscreen.blit(titleText, titleRect)
+    mainscreen.blit(copyText, copyRect)
+    # print gameStart
+    # pygame.display.update()
+    # pygame.time.wait(3000)
+    # mainscreen.fill((0, 0, 0), None, 0)
+    # pygame.display.update()
+    # gameText = gameFont.render('DO YOU WANT TO RETURN TO AN OLD GAME (O) OR START A NEW(N) ONE?', True, LIGHTGRAY)
+    # gameRect = gameText.get_rect()
+    # gameRect.center = (400, 200)
+    # mainscreen.blit(gameText, gameRect)
+    
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        elif(gameStart == 0 and event.type == pygame.KEYUP):
+            gameStart = 1
+            mainscreen.fill((0, 0, 0), None, 0)
+            answer = inputbox.ask(mainscreen, "DO YOU WANT TO RETURN TO AN OLD GAME (O) OR START A NEW(N) ONE?")
+            print gameStart
+        elif event.type == pygame.KEYUP:
+            if(event.key == K_F1):
+                playnumText = startFont.render('Enter Number of Players (1-8):', True, LIGHTGRAY)
+                playnumRect = playnumText.get_rect()
+                playnumRect.center = (400, 300)
+                DISPLAYSURF.blit(playnumText, playnumRect)
+            if(numPlayers == 0):
+                if(event.key >= 49 and event.key <= 56):
+                    numPlayers = (event.key - 48)
+                    print "Now launch the next line of text questioning user for input."
+                    answer = inputbox.ask(DISPLAYSURF, "Number of Worlds (1-26):")
+                    #compnumText = startFont.render('Number of Computer Players (1-7):')
+            else:
+                if(event.key >= 49 and event.key <= 55):
+                    comPlayers = (event.key - 48)
+                    print "Computer players selected, number of worlds (1-26):"
+            if(comPlayers == 0):
+                print 'hi'
+                # if 1 then nested if 0-9
+                # if 2 then nested if 0-9
+                # or use the following code below
+    pygame.display.update()
 '''
