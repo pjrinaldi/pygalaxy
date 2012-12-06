@@ -97,6 +97,12 @@ def main():
     # chimp = Chimp()
     # fist = Fist()
     # allsprites = pygame.sprite.RenderPlain((fist, chimp))
+    gameStart = 0
+    gameType = 0
+    numPlayers = 0
+    comPlayers = 0
+    numWorlds = 0
+    buildShips = 0
 
 #Main Loop
     while 1:
