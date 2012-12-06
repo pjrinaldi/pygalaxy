@@ -25,7 +25,7 @@ def get_key():
 
 def display_box(screen, message):
     "Print a message in a box in the middle of the screen"
-    fontobject = pygame.font.Font(None,18)
+    fontobject = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 12)
     pygame.draw.rect(screen, (0,0,0),
                    ((screen.get_width() / 2) - 100,
                     (screen.get_height() / 2) - 10,
