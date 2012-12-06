@@ -66,20 +66,24 @@ def main():
        a loop until the function returns."""
 #Initialize Everything
     pygame.init()
-    screen = pygame.display.set_mode((468, 60))
-    pygame.display.set_caption('Monkey Fever')
+    screen = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption('Python Galaxy!')
     pygame.mouse.set_visible(0)
 
 #Create The Backgound
     background = pygame.Surface(screen.get_size())
     background = background.convert()
-    background.fill((250, 250, 250))
+    background.fill((0, 0, 0))
 
 #Put Text On The Background, Centered
     if pygame.font:
-        font = pygame.font.Font(None, 36)
-        text = font.render("Pummel The Chimp, And Win $$$", 1, (10, 10, 10))
-        textpos = text.get_rect(centerx=background.get_width()/2)
+        font = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 48)
+        text = font.render("Python Galaxy!", True, (235, 235, 235))
+        textpos = text.get_rect(center=(background.get_width()/2, background.get_height()/4))
+        background.blit(text, textpos)
+        font = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 16)
+        text = font.render('COPYRIGHT 2012 PASQUALE J RINALDI JR', True, (235, 235, 235))
+        textpos = text.get_rect(center=(background.get_width()/2, background.get_height()/2))
         background.blit(text, textpos)
 
 #Display The Background
@@ -92,7 +96,7 @@ def main():
     # punch_sound = load_sound('punch.wav')
     # chimp = Chimp()
     # fist = Fist()
-    allsprites = pygame.sprite.RenderPlain((fist, chimp))
+    # allsprites = pygame.sprite.RenderPlain((fist, chimp))
 
 #Main Loop
     while 1:
@@ -105,6 +109,7 @@ def main():
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 return
             elif event.type == MOUSEBUTTONDOWN:
+                '''
                 if fist.punch(chimp):
                     punch_sound.play() #punch
                     chimp.punched()
@@ -112,12 +117,13 @@ def main():
                     whiff_sound.play() #miss
             elif event.type is MOUSEBUTTONUP:
                 fist.unpunch()
+                '''
 
-        allsprites.update()
+        # allsprites.update()
 
     #Draw Everything
         screen.blit(background, (0, 0))
-        allsprites.draw(screen)
+        # allsprites.draw(screen)
         pygame.display.flip()
 
 #Game Over
