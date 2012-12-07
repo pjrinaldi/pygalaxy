@@ -14,25 +14,58 @@ class GalaxyFrame(wx.Frame):
         self.SetSizer(self.mainBox)
         self.TitleFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 48)
         self.gameFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 12)
+        self.keyStrokesList = []
         
+        self.TitleText = "PYTHON GALAXY!"
+        self.numPlayerText = "HOW MANY PLAYERS (1-20)?"
+        self.numWorldsText = "HOW MANY WORLDS (5-40)?"
         self.configureGame = 0
         self.numPlayers = 0
+        self.numWorlds = 0
         
-        self.DisplayText(self.imageViewer, "PYTHON GALAXY!", self.TitleFont, 0, None)
+        self.DisplayText(self.imageViewer, self.TitleText, self.TitleFont)
 
         self.Show(True)
 
     def CaptureKeys(self, event):
         keycode = event.GetKeyCode()
         if self.configureGame == 0:
+            self.keyStrokesList = []
             self.configureGame = 1
-            self.DisplayText(self.imageViewer, "HOW MANY PLAYERS (1-20)?", self.gameFont, 0, None)
+            # self.DisplayText(self.imageViewer, "HOW MANY PLAYERS (1-20)?", self.gameFont, 0, None)
+            self.DisplayText(self.imageViewer, self.numPlayerText, self.gameFont)
         elif self.configureGame == 1:
-            self.configureGame = 2
-            self.DisplayText(self.imageViewer, "HOW MANY WORLDS (5-40)?", self.gameFont, 1, self.mainBitmap.GetBitmap())
+            if keycode > 47 and keycode < 57:
+                self.keyStrokesList.append(keycode - 48)
+            elif keycode == 13:
+                print self.keyStrokesList
+                self.configureGame = 2
+                #self.DisplayText(self.imageViewer, "HOW MANY WORLDS (5-40)?", self.gameFont, 1, self.mainBitmap.GetBitmap())
+                self.DisplayText(self.imageViewer, self.numWorldsText, self.gameFont)
         print keycode
         event.Skip()
-        
+
+    def DisplayText(self, currentPanel, currentText, currentFont):
+        self.tmpText = Image.new('L', self.GetSize())
+        self.tmpDraw = ImageDraw.Draw(self.tmpText)
+        self.tmpSize = self.tmpDraw.textsize(currentText, font=currentFont)
+        self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
+        self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50
+        self.tmpDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=235)
+        self.ShowBitmapFromPIL(currentPanel, self.tmpText)
+        currentPanel.SetFocus()
+
+    def AddText(self, currentBitmap, currentLines, currentFont, currentText):
+        print "Add Text"
+
+    def ShowBitmapFromPIL(self, currentPanel, currentPIL): # when we operate on the image...
+        self.wxImg = wx.EmptyImage(currentPIL.size[0], currentPIL.size[1])
+        self.wxImg.SetData(currentPIL.convert("RGB").tostring())
+        self.wxImg.SetAlphaData(currentPIL.convert("RGBA").tostring()[3::4])
+        self.bmpImg = self.wxImg.ConvertToBitmap()
+        currentPanel.DestroyChildren()
+        self.bmp = wx.StaticBitmap(currentPanel, -1, self.bmpImg, wx.Point(0,0), wx.Size(currentPIL.size[0], currentPIL.size[1]))
+'''        
     def DisplayText(self, currentPanel, currentText, currentFont, currentLines, currentBitmap):
         if currentBitmap == None:
             self.tmpText = Image.new('L', self.GetSize())
@@ -47,13 +80,4 @@ class GalaxyFrame(wx.Frame):
         self.tmpDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=235)
         self.mainBitmap = self.ShowBitmapFromPIL(currentPanel, self.tmpText)
         currentPanel.SetFocus()
-        
-
-    def ShowBitmapFromPIL(self, currentPanel, currentPIL): # when we operate on the image...
-        self.wxImg = wx.EmptyImage(currentPIL.size[0], currentPIL.size[1])
-        self.wxImg.SetData(currentPIL.convert("RGB").tostring())
-        self.wxImg.SetAlphaData(currentPIL.convert("RGBA").tostring()[3::4])
-        self.bmpImg = self.wxImg.ConvertToBitmap()
-        currentPanel.DestroyChildren()
-        self.bmp = wx.StaticBitmap(currentPanel, -1, self.bmpImg, wx.Point(0,0), wx.Size(currentPIL.size[0], currentPIL.size[1]))
-        return self.bmp
+'''
