@@ -8,7 +8,6 @@ class GalaxyFrame(wx.Frame):
         self.imageViewer = wx.Panel(self, style=wx.BORDER_NONE)
         self.imageViewer.SetBackgroundColour(wx.Colour(0, 0, 0))
         self.imageViewer.Bind(wx.EVT_CHAR, self.CaptureKeys)
-        self.mainBitmap = None
         self.mainBox = wx.BoxSizer(wx.VERTICAL)
         self.mainBox.Add(self.imageViewer, 1, wx.ALL | wx.EXPAND | wx.ALIGN_LEFT)
         self.SetSizer(self.mainBox)
@@ -23,8 +22,11 @@ class GalaxyFrame(wx.Frame):
         self.numPlayers = 0
         self.numWorlds = 0
         
-        self.DisplayText(self.imageViewer, self.TitleText, self.TitleFont)
-
+        self.mainImage = Image.new('L', self.GetSize())
+        self.mainDraw = ImageDraw.Draw(self.mainImage)
+        self.AddText(self.TitleText, self.TitleFont, self.mainDraw, 0)
+        self.BlitTextSurface(self.imageViewer, self.mainImage)
+                
         self.Show(True)
 
     def CaptureKeys(self, event):
@@ -32,16 +34,23 @@ class GalaxyFrame(wx.Frame):
         if self.configureGame == 0:
             self.keyStrokesList = []
             self.configureGame = 1
-            # self.DisplayText(self.imageViewer, "HOW MANY PLAYERS (1-20)?", self.gameFont, 0, None)
-            self.DisplayText(self.imageViewer, self.numPlayerText, self.gameFont)
+            self.mainImage = Image.new('L', self.GetSize())
+            self.mainDraw = ImageDraw.Draw(self.mainImage)
+            self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
+            self.BlitTextSurface(self.imageViewer, self.mainImage)
         elif self.configureGame == 1:
-            if keycode > 47 and keycode < 57:
+            if keycode > 47 and keycode < 58:
                 self.keyStrokesList.append(keycode - 48)
             elif keycode == 13:
                 print self.keyStrokesList
+                print "Need to validate number and redisplay if not valid, otherwise continue on"
                 self.configureGame = 2
-                #self.DisplayText(self.imageViewer, "HOW MANY WORLDS (5-40)?", self.gameFont, 1, self.mainBitmap.GetBitmap())
-                self.DisplayText(self.imageViewer, self.numWorldsText, self.gameFont)
+                self.mainImage = Image.new('L', self.GetSize())
+                self.mainDraw = ImageDraw.Draw(self.mainImage)
+                self.numPlayerText = self.numPlayerText + " " + str(self.keyStrokesList[0])
+                self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
+                self.AddText(self.numWorldsText, self.gameFont, self.mainDraw, 1)
+                self.BlitTextSurface(self.imageViewer, self.mainImage)
         print keycode
         event.Skip()
 
@@ -55,8 +64,17 @@ class GalaxyFrame(wx.Frame):
         self.ShowBitmapFromPIL(currentPanel, self.tmpText)
         currentPanel.SetFocus()
 
-    def AddText(self, currentBitmap, currentLines, currentFont, currentText):
-        print "Add Text"
+    def AddText(self, currentText, currentFont, currentDraw, currentLine):
+        print "Add Text to pil surface"
+        self.tmpSize = currentDraw.textsize(currentText, font=currentFont)
+        self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
+        self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLine)
+        currentDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=235)
+
+    def BlitTextSurface(self, currentPanel, currentPIL):
+        print "display text surface to screen"
+        self.ShowBitmapFromPIL(currentPanel, currentPIL)
+        currentPanel.SetFocus()
 
     def ShowBitmapFromPIL(self, currentPanel, currentPIL): # when we operate on the image...
         self.wxImg = wx.EmptyImage(currentPIL.size[0], currentPIL.size[1])
@@ -65,19 +83,3 @@ class GalaxyFrame(wx.Frame):
         self.bmpImg = self.wxImg.ConvertToBitmap()
         currentPanel.DestroyChildren()
         self.bmp = wx.StaticBitmap(currentPanel, -1, self.bmpImg, wx.Point(0,0), wx.Size(currentPIL.size[0], currentPIL.size[1]))
-'''        
-    def DisplayText(self, currentPanel, currentText, currentFont, currentLines, currentBitmap):
-        if currentBitmap == None:
-            self.tmpText = Image.new('L', self.GetSize())
-        else:
-            self.tmpImg = wx.ImageFromBitmap(currentBitmap)
-            self.tmpText = Image.new('RGB', (self.tmpImg.GetWidth(), self.tmpImg.GetHeight()))
-            self.tmpText.fromstring(self.tmpImg.GetData())
-        self.tmpDraw = ImageDraw.Draw(self.tmpText)
-        self.tmpSize = self.tmpDraw.textsize(currentText, font=currentFont)
-        self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
-        self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLines)
-        self.tmpDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=235)
-        self.mainBitmap = self.ShowBitmapFromPIL(currentPanel, self.tmpText)
-        currentPanel.SetFocus()
-'''
