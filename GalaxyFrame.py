@@ -10,17 +10,21 @@ class GalaxyFrame(wx.Frame):
         self.mainBox = wx.BoxSizer(wx.VERTICAL)
         self.mainBox.Add(self.imageViewer, 1, wx.ALL | wx.EXPAND | wx.ALIGN_LEFT)
         self.SetSizer(self.mainBox)
+        self.gameFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 12)
         
+        # self.DisplayText(self.imageViewer, "DO YOU WANT TO RETURN TO AN OLD GAME (O) OR START A NEW(N) ONE?", self.gameFont)
+        
+        self.Show(True)
+        
+    def DisplayText(self, currentPanel, currentText, currentFont):
         self.tmpText = Image.new('L', self.GetSize())
         self.tmpDraw = ImageDraw.Draw(self.tmpText)
-        self.gameFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 12)
-        self.tmpSize = self.tmpDraw.textsize("DO YOU WANT TO RETURN TO AN OLD(O) GAME OR START A NEW(N) GAME?", font=self.gameFont)
+        self.tmpSize = self.tmpDraw.textsize(currentText, font=currentFont)
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
         self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50
-        self.tmpDraw.text((self.tmpWidth, self.tmpHeight), "DO YOU WANT TO RETURN TO AN OLD(O) GAME OR START A NEW(N) ONE?", font=self.gameFont, fill=235)
-        self.ShowBitmapFromPIL(self.imageViewer, self.tmpText)
-
-        self.Show(True)
+        self.tmpDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=235)
+        self.ShowBitmapFromPIL(currentPanel, self.tmpText)
+        
 
     def ShowBitmapFromPIL(self, currentPanel, currentPIL): # when we operate on the image...
         self.wxImg = wx.EmptyImage(currentPIL.size[0], currentPIL.size[1])
@@ -29,4 +33,3 @@ class GalaxyFrame(wx.Frame):
         self.bmpImg = self.wxImg.ConvertToBitmap()
         currentPanel.DestroyChildren()
         self.bmp = wx.StaticBitmap(currentPanel, -1, self.bmpImg, wx.Point(0,0), wx.Size(currentPIL.size[0], currentPIL.size[1]))
-        # currentPanel.SetClientSize(self.bmp.GetSize())
