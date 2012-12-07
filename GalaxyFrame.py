@@ -1,5 +1,4 @@
 from wx import wx
-import StringIO
 import Image, ImageFont, ImageDraw
 
 class GalaxyFrame(wx.Frame):
