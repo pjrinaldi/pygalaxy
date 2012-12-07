@@ -1,5 +1,6 @@
 from wx import wx
 import Image, ImageFont, ImageDraw
+import time
 
 class GalaxyFrame(wx.Frame):
     
@@ -42,15 +43,32 @@ class GalaxyFrame(wx.Frame):
             if keycode > 47 and keycode < 58:
                 self.keyStrokesList.append(keycode - 48)
             elif keycode == 13:
+                testNum = ""
                 print self.keyStrokesList
+                for i in self.keyStrokesList:
+                    testNum = testNum + str(i)
+                print testNum
                 print "Need to validate number and redisplay if not valid, otherwise continue on"
-                self.configureGame = 2
-                self.mainImage = Image.new('L', self.GetSize())
-                self.mainDraw = ImageDraw.Draw(self.mainImage)
-                self.numPlayerText = self.numPlayerText + " " + str(self.keyStrokesList[0])
-                self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
-                self.AddText(self.numWorldsText, self.gameFont, self.mainDraw, 1)
-                self.BlitTextSurface(self.imageViewer, self.mainImage)
+                if int(testNum) > 0 and int(testNum) < 21:                    
+                    self.configureGame = 2
+                    self.mainImage = Image.new('L', self.GetSize())
+                    self.mainDraw = ImageDraw.Draw(self.mainImage)
+                    self.numPlayerText = self.numPlayerText + " " + testNum
+                    self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
+                    self.AddText(self.numWorldsText, self.gameFont, self.mainDraw, 1)
+                    self.BlitTextSurface(self.imageViewer, self.mainImage)
+                else:
+                    self.configureGame = 1
+                    self.keyStrokesList = []
+                    self.imageViewer.Hide()
+                    # self.bmp.Hide()
+                    time.sleep(1)
+                    # self.bmp.Show()
+                    self.imageViewer.SetBackgroundColour(wx.Colour(0, 0, 0))
+                    self.mainImage = Image.new('L', self.GetSize())
+                    self.mainDraw = ImageDraw.Draw(self.mainImage)
+                    self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
+                    self.BlitTextSurface(self.imageViewer, self.mainImage)
         print keycode
         event.Skip()
 
@@ -60,7 +78,7 @@ class GalaxyFrame(wx.Frame):
         self.tmpSize = self.tmpDraw.textsize(currentText, font=currentFont)
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
         self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50
-        self.tmpDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=235)
+        self.tmpDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=215)
         self.ShowBitmapFromPIL(currentPanel, self.tmpText)
         currentPanel.SetFocus()
 
@@ -69,7 +87,7 @@ class GalaxyFrame(wx.Frame):
         self.tmpSize = currentDraw.textsize(currentText, font=currentFont)
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
         self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLine)
-        currentDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=235)
+        currentDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=215)
 
     def BlitTextSurface(self, currentPanel, currentPIL):
         print "display text surface to screen"
@@ -82,4 +100,5 @@ class GalaxyFrame(wx.Frame):
         self.wxImg.SetAlphaData(currentPIL.convert("RGBA").tostring()[3::4])
         self.bmpImg = self.wxImg.ConvertToBitmap()
         currentPanel.DestroyChildren()
+        if self.bmp: self.bmp.Destroy()
         self.bmp = wx.StaticBitmap(currentPanel, -1, self.bmpImg, wx.Point(0,0), wx.Size(currentPIL.size[0], currentPIL.size[1]))
