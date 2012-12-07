@@ -64,6 +64,7 @@ class GalaxyFrame(wx.Frame):
         self.tmpSize = currentDraw.textsize(currentText, font=currentFont)
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
         self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLine)
+        if currentLine == 0: currentDraw.rectangle([(0, 0), (self.GetSize()[0], self.GetSize()[1])], fill=0)
         currentDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=215)
 
     def BlitTextSurface(self, currentPanel, currentPIL, currentBmp):
