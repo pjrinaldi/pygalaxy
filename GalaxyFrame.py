@@ -1,6 +1,6 @@
 from wx import wx
 import Image, ImageFont, ImageDraw
-# import time
+import time
 
 class GalaxyFrame(wx.Frame):
     
@@ -46,18 +46,21 @@ class GalaxyFrame(wx.Frame):
                 for i in self.keyStrokesList:
                     testNum = testNum + str(i)
                 print testNum
-                if int(testNum) > 0 and int(testNum) < 21:                    
-                    self.configureGame = 2
-                    self.numPlayerText = self.numPlayerText + " " + testNum
-                    self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
-                    self.AddText(self.numWorldsText, self.gameFont, self.mainDraw, 1)
-                    self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
-                else:
-                    self.configureGame = 1
-                    self.keyStrokesList = []
-                    self.imageViewer.SetBackgroundColour(wx.Colour(0, 0, 0))
-                    self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
-                    self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
+                if testNum.isdigit():
+                    if int(testNum) > 0 and int(testNum) < 21:                    
+                        self.configureGame = 2
+                        self.numPlayerText = self.numPlayerText + " " + testNum
+                        self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
+                        self.AddText(self.numWorldsText, self.gameFont, self.mainDraw, 1)
+                        self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
+                    else:
+                        self.configureGame = 1
+                        self.keyStrokesList = []
+                        # self.imageViewer.SetBackgroundColour(wx.Colour(0, 0, 0))
+                        self.AddText(" ", self.gameFont, self.mainDraw, 0)
+                        time.sleep(5)
+                        self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
+                        self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
         event.Skip()
 
     def AddText(self, currentText, currentFont, currentDraw, currentLine):
