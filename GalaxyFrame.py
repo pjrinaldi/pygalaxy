@@ -20,9 +20,22 @@ class GalaxyFrame(wx.Frame):
         self.TitleText = "PYTHON GALAXY!"
         self.numPlayerText = "HOW MANY PLAYERS (1-20)?"
         self.numWorldsText = "HOW MANY WORLDS (5-40)?"
+        self.numTurnsText = "HOW MANY YEARS (TURNS) IN THE GAME (1-100)?"
+        self.nuetralBuildText = "DO YOU WANT THE NEUTRAL WORLDS TO BUILD DEFENSIVE SHIPS?"
+        self.playerNameText1 = "FLEET ADMIRAL 1 WILL BEGIN THE GAME IN CONTROL OF WORLD:(A)"
+        self.playerNameText2 = "WHAT NAME WILL THIS FLEET ADMIRAL USE (1 TO 8 CHARACTERS)?"
+        self.universeCreateText = "PLEASE WAIT WHILE I CREATE THE UNIVERSE"
+        self.askNewSetupText = "NEW SETUP?"
+        self.universeReCreateText = "PLEASE WAIT WHILE I REARRANGE THE STARS"
+        self.gameSetupText = "NOW WAIT WHILE I SETUP THE GAME"
         self.configureGame = 0
         self.numPlayers = 0
         self.numWorlds = 0
+        self.numTurns = 0
+        self.neutralBuild = 0
+        self.newSetup = 0
+        self.playerNames = []
+        self.playerWorlds = []
         self.mainImage = Image.new('L', self.GetSize())
         self.mainDraw = ImageDraw.Draw(self.mainImage)
         self.AddText(self.TitleText, self.TitleFont, self.mainDraw, 0)
@@ -90,4 +103,7 @@ class GalaxyFrame(wx.Frame):
         print "end sleep"
         self.mainBmp.Show()
         self.imageViewer.Update()
+        
+    def CreateUniverse(self):
+        print "create universe algorithm here.  should be a multi matrix of [20x20]"
         
