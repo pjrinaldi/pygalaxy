@@ -1,5 +1,5 @@
 from wx import wx
-import Image, ImageFont, ImageDraw
+from PIL import Image, ImageFont, ImageDraw
 import time
 
 class GalaxyFrame(wx.Frame):
@@ -56,9 +56,7 @@ class GalaxyFrame(wx.Frame):
                     else:
                         self.configureGame = 1
                         self.keyStrokesList = []
-                        # self.imageViewer.SetBackgroundColour(wx.Colour(0, 0, 0))
-                        self.AddText(" ", self.gameFont, self.mainDraw, 0)
-                        time.sleep(5)
+                        self.BlinkSurface()
                         self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
                         self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
         event.Skip()
@@ -67,7 +65,7 @@ class GalaxyFrame(wx.Frame):
         self.tmpSize = currentDraw.textsize(currentText, font=currentFont)
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
         self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLine)
-        if currentLine == 0: currentDraw.rectangle([(0, 0), (self.GetSize()[0], self.GetSize()[1])], fill=0)
+        if currentLine == 0: currentDraw.rectangle((0, 0, self.GetSizeTuple()[0], self.GetSizeTuple()[1]), fill="black", outline=None)
         currentDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=215)
 
     def BlitTextSurface(self, currentPanel, currentPIL, currentBmp):
@@ -80,3 +78,13 @@ class GalaxyFrame(wx.Frame):
         self.wxImg.SetAlphaData(currentPIL.convert("RGBA").tostring()[3::4])
         self.bmpImg = self.wxImg.ConvertToBitmap()
         currentBmp.SetBitmap(self.bmpImg)
+
+    def BlinkSurface(self):
+        self.mainBmp.Hide()
+        self.imageViewer.Update()
+        print "start sleep"
+        time.sleep(0.1)
+        print "end sleep"
+        self.mainBmp.Show()
+        self.imageViewer.Update()
+        
