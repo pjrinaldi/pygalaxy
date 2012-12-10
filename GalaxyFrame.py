@@ -59,6 +59,9 @@ class GalaxyFrame(wx.Frame):
                         self.BlinkSurface()
                         self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
                         self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
+        elif self.configureGame == 2:
+            print "verify worlds entered and then prompt with next question or blink and reset for worlds."
+            
         event.Skip()
 
     def AddText(self, currentText, currentFont, currentDraw, currentLine):
