@@ -13,15 +13,15 @@ class GalaxyFrame(wx.Frame):
         self.mainBox = wx.BoxSizer(wx.VERTICAL)
         self.mainBox.Add(self.imageViewer, 1, wx.ALL | wx.EXPAND | wx.ALIGN_LEFT)
         self.SetSizer(self.mainBox)
-        self.TitleFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 48)
+        self.titleFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 48)
         self.gameFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 12)
         self.keyStrokesList = []
         
-        self.TitleText = "PYTHON GALAXY!"
+        self.titleText = "PYTHON GALAXY!"
         self.numPlayerText = "HOW MANY PLAYERS (1-20)?"
         self.numWorldsText = "HOW MANY WORLDS (5-40)?"
         self.numTurnsText = "HOW MANY YEARS (TURNS) IN THE GAME (1-100)?"
-        self.nuetralBuildText = "DO YOU WANT THE NEUTRAL WORLDS TO BUILD DEFENSIVE SHIPS?"
+        self.neutralBuildText = "DO YOU WANT THE NEUTRAL WORLDS TO BUILD DEFENSIVE SHIPS?"
         self.playerNameText1 = "FLEET ADMIRAL 1 WILL BEGIN THE GAME IN CONTROL OF WORLD:(A)"
         self.playerNameText2 = "WHAT NAME WILL THIS FLEET ADMIRAL USE (1 TO 8 CHARACTERS)?"
         self.universeCreateText = "PLEASE WAIT WHILE I CREATE THE UNIVERSE"
@@ -38,10 +38,10 @@ class GalaxyFrame(wx.Frame):
         self.playerWorlds = []
         self.mainImage = Image.new('L', self.GetSize())
         self.mainDraw = ImageDraw.Draw(self.mainImage)
-        self.AddText(self.TitleText, self.TitleFont, self.mainDraw, 0)
+        self.AddTitleText(self.titleText)
         self.wxBmp = wx.EmptyBitmap(self.GetSize()[0], self.GetSize()[1])
         self.mainBmp = wx.StaticBitmap(self.imageViewer, -1, self.wxBmp, wx.Point(0, 0))
-        self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
+        self.BlitTextSurface()
                 
         self.Show(True)
     def CaptureKeys(self, event):
@@ -49,8 +49,8 @@ class GalaxyFrame(wx.Frame):
         if self.configureGame == 0:
             self.keyStrokesList = []
             self.configureGame = 1
-            self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
-            self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
+            self.AddText(self.numPlayerText, 0)
+            self.BlitTextSurface()
         elif self.configureGame == 1:
             if keycode > 47 and keycode < 58:
                 self.keyStrokesList.append(keycode - 48)
@@ -58,42 +58,94 @@ class GalaxyFrame(wx.Frame):
                 testNum = ""
                 for i in self.keyStrokesList:
                     testNum = testNum + str(i)
-                print testNum
                 if testNum.isdigit():
                     if int(testNum) > 0 and int(testNum) < 21:                    
                         self.configureGame = 2
+                        self.numPlayers = int(testNum)
                         self.numPlayerText = self.numPlayerText + " " + testNum
-                        self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
-                        self.AddText(self.numWorldsText, self.gameFont, self.mainDraw, 1)
-                        self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
+                        self.AddText(self.numPlayerText, 0)
+                        self.AddText(self.numWorldsText, 1)
+                        self.BlitTextSurface()
                     else:
                         self.configureGame = 1
                         self.keyStrokesList = []
                         self.BlinkSurface()
-                        self.AddText(self.numPlayerText, self.gameFont, self.mainDraw, 0)
-                        self.BlitTextSurface(self.imageViewer, self.mainImage, self.mainBmp)
+                else:
+                    self.BlinkSurface()
+                    self.keyStrokesList = []
         elif self.configureGame == 2:
-            print "verify worlds entered and then prompt with next question or blink and reset for worlds."
-            
+            if keycode > 47 and keycode < 58: # number 1 thru 0 pressed
+                self.keyStrokesList.append(keycode - 48)
+            elif keycode == 13: # return pressed
+                testNum = ""
+                for i in self.keyStrokesList:
+                    testNum = testNum + str(i)
+                if testNum.isdigit(): # if captured keystrokes were a valid number
+                    if int(testNum) > 4 and int(testNum) < 41: # if its between world range
+                        self.configureGame = 3
+                        self.numWorlds = int(testNum)
+                        self.numWorldsText = self.numWorldsText + " " + testNum
+                        self.AddText(self.numPlayerText, 0)
+                        self.AddText(self.numWorldsText, 1)
+                        self.AddText(self.numTurnsText, 2)
+                        self.BlitTextSurface()
+                    else:
+                        self.configureGame = 2
+                        self.keyStrokesList = []
+                        self.BlinkSurface()
+                else:
+                    self.BlinkSurface()
+                    self.keyStrokesList = []
+        elif self.configureGame == 3:
+            if keycode > 47 and keycode < 58: # number 1 thru 0 pressed
+                self.keyStrokesList.append(keycode - 48)
+            elif keycode == 13: # return pressed
+                testNum = ""
+                for i in self.keyStrokesList:
+                    testNum = testNum + str(i)
+                if testNum.isdigit(): # if captured keystrokes were a valid number
+                    if int(testNum) > 0 and int(testNum)< 101: # if its between years range
+                        self.configureGame = 4
+                        self.numTurns = int(testNum)
+                        self.numTurnsText = self.numTurnsText + " " + testNum
+                        self.AddText(self.numPlayerText, 0)
+                        self.AddText(self.numWorldsText, 1)
+                        self.AddText(self.numTurnsText, 2)
+                        self.AddText(self.neutralBuildText, 3)
+                        self.BlitTextSurface()
+                    else:
+                        self.configureGame = 3
+                        self.keyStrokesList = []
+                        self.BlinkSurface()
+                else:
+                    self.BlinkSurface()
+                    self.keyStrokesList = []
         event.Skip()
 
-    def AddText(self, currentText, currentFont, currentDraw, currentLine):
-        self.tmpSize = currentDraw.textsize(currentText, font=currentFont)
+    def AddText(self, currentText, currentLine):
+        self.tmpSize = self.mainDraw.textsize(currentText, font=self.gameFont)
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
         self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLine)
-        if currentLine == 0: currentDraw.rectangle((0, 0, self.GetSizeTuple()[0], self.GetSizeTuple()[1]), fill="black", outline=None)
-        currentDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=currentFont, fill=215)
+        if currentLine == 0: self.mainDraw.rectangle((0, 0, self.GetSizeTuple()[0], self.GetSizeTuple()[1]), fill="black", outline=None)
+        self.mainDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=self.gameFont, fill=215)
 
-    def BlitTextSurface(self, currentPanel, currentPIL, currentBmp):
-        self.ShowBitmapFromPIL(currentPIL, currentBmp)
-        currentPanel.SetFocus()
+    def AddTitleText(self, currentText):
+        self.tmpSize = self.mainDraw.textsize(currentText, font=self.titleFont)
+        self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
+        self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50
+        self.mainDraw.rectangle((0, 0, self.GetSizeTuple()[0], self.GetSizeTuple()[1]), fill="black", outline=None)
+        self.mainDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=self.titleFont, fill=215)
+        
+    def BlitTextSurface(self):
+        self.ShowBitmapFromPIL()
+        self.imageViewer.SetFocus()
 
-    def ShowBitmapFromPIL(self, currentPIL, currentBmp): # when we operate on the image...
-        self.wxImg = wx.EmptyImage(currentPIL.size[0], currentPIL.size[1])
-        self.wxImg.SetData(currentPIL.convert("RGB").tostring())
-        self.wxImg.SetAlphaData(currentPIL.convert("RGBA").tostring()[3::4])
+    def ShowBitmapFromPIL(self): # when we operate on the image...
+        self.wxImg = wx.EmptyImage(self.mainImage.size[0], self.mainImage.size[1])
+        self.wxImg.SetData(self.mainImage.convert("RGB").tostring())
+        self.wxImg.SetAlphaData(self.mainImage.convert("RGBA").tostring()[3::4])
         self.bmpImg = self.wxImg.ConvertToBitmap()
-        currentBmp.SetBitmap(self.bmpImg)
+        self.mainBmp.SetBitmap(self.bmpImg)
 
     def BlinkSurface(self):
         self.mainBmp.Hide()
