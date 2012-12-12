@@ -129,10 +129,13 @@ class GalaxyFrame(wx.Frame):
                     self.neutralBuild = 1
                 else:
                     self.neutralBuild= 0
+                # the loop works, but i need to do the loop for each configuregame function and break out...
                 for i in range(self.numPlayers): # (i+1) is each player to set their name and world.
-                    tmpText = ""
-                    tmpText.join(self.playerNameText[0], str(i+1), self.playerNameText[1], self.playerNameText[2])
-                    # self.eachplayer = i + 1
+                    self.AddText(''.join([self.playerNameText[0], str(i+1), self.playerNameText[1], self.worldList[i], self.playerNameText[2]]), 0)
+                    self.AddText(self.playerNameText[3], 1)
+                    self.BlitTextSurface()
+                    # need a variable to allow me to capture name of person, iterator i am on, and then return to this spot and conitue my loop
+                    break
                     if i == range(self.numPlayers):
                         self.configureGame = 5
                         print "name config is done."
