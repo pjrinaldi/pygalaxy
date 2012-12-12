@@ -127,14 +127,14 @@ class GalaxyFrame(wx.Frame):
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
         self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLine)
         if currentLine == 0: self.mainDraw.rectangle((0, 0, self.GetSizeTuple()[0], self.GetSizeTuple()[1]), fill="black", outline=None)
-        self.mainDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=self.gameFont, fill=215)
+        self.mainDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=self.gameFont, fill=171)
 
     def AddTitleText(self, currentText):
         self.tmpSize = self.mainDraw.textsize(currentText, font=self.titleFont)
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
         self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50
         self.mainDraw.rectangle((0, 0, self.GetSizeTuple()[0], self.GetSizeTuple()[1]), fill="black", outline=None)
-        self.mainDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=self.titleFont, fill=215)
+        self.mainDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=self.titleFont, fill=171)
         
     def BlitTextSurface(self):
         self.ShowBitmapFromPIL()
