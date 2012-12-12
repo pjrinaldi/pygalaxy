@@ -22,12 +22,12 @@ class GalaxyFrame(wx.Frame):
         self.numWorldsText = "HOW MANY WORLDS (5-40)?"
         self.numTurnsText = "HOW MANY YEARS (TURNS) IN THE GAME (1-100)?"
         self.neutralBuildText = "DO YOU WANT THE NEUTRAL WORLDS TO BUILD DEFENSIVE SHIPS?"
-        self.playerNameText1 = "FLEET ADMIRAL 1 WILL BEGIN THE GAME IN CONTROL OF WORLD:(A)"
-        self.playerNameText2 = "WHAT NAME WILL THIS FLEET ADMIRAL USE (1 TO 8 CHARACTERS)?"
+        self.playerNameText = ["FLEET ADMIRAL ", " WILL BEGIN THE GAME IN CONTROL OF WORLD:(", ")", "WHAT NAME WILL THIS FLEET ADMIRAL USE (1 TO 8 CHARACTERS)?"]
         self.universeCreateText = "PLEASE WAIT WHILE I CREATE THE UNIVERSE"
         self.askNewSetupText = "NEW SETUP?"
         self.universeReCreateText = "PLEASE WAIT WHILE I REARRANGE THE STARS"
         self.gameSetupText = "NOW WAIT WHILE I SETUP THE GAME"
+        self.worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
         self.configureGame = 0
         self.numPlayers = 0
         self.numWorlds = 0
@@ -63,6 +63,7 @@ class GalaxyFrame(wx.Frame):
                         self.configureGame = 2
                         self.numPlayers = int(testNum)
                         self.numPlayerText = self.numPlayerText + " " + testNum
+                        self.keyStrokesList = []
                         self.AddText(self.numPlayerText, 0)
                         self.AddText(self.numWorldsText, 1)
                         self.BlitTextSurface()
@@ -85,6 +86,7 @@ class GalaxyFrame(wx.Frame):
                         self.configureGame = 3
                         self.numWorlds = int(testNum)
                         self.numWorldsText = self.numWorldsText + " " + testNum
+                        self.keyStrokesList = []
                         self.AddText(self.numPlayerText, 0)
                         self.AddText(self.numWorldsText, 1)
                         self.AddText(self.numTurnsText, 2)
@@ -108,6 +110,7 @@ class GalaxyFrame(wx.Frame):
                         self.configureGame = 4
                         self.numTurns = int(testNum)
                         self.numTurnsText = self.numTurnsText + " " + testNum
+                        self.keyStrokesList = []
                         self.AddText(self.numPlayerText, 0)
                         self.AddText(self.numWorldsText, 1)
                         self.AddText(self.numTurnsText, 2)
@@ -120,6 +123,22 @@ class GalaxyFrame(wx.Frame):
                 else:
                     self.BlinkSurface()
                     self.keyStrokesList = []
+        elif self.configureGame == 4:
+            if keycode == 121 or keycode == 89 or keycode == 110 or keycode == 78: # y Y n N
+                if keycode == 121 or keycode == 89:
+                    self.neutralBuild = 1
+                else:
+                    self.neutralBuild= 0
+                for i in range(self.numPlayers): # (i+1) is each player to set their name and world.
+                    tmpText = ""
+                    tmpText.join(self.playerNameText[0], str(i+1), self.playerNameText[1], self.playerNameText[2])
+                    # self.eachplayer = i + 1
+                    if i == range(self.numPlayers):
+                        self.configureGame = 5
+                        print "name config is done."
+            else:
+                self.BlinkSurface()
+            
         event.Skip()
 
     def AddText(self, currentText, currentLine):
@@ -150,9 +169,7 @@ class GalaxyFrame(wx.Frame):
     def BlinkSurface(self):
         self.mainBmp.Hide()
         self.imageViewer.Update()
-        print "start sleep"
         time.sleep(0.1)
-        print "end sleep"
         self.mainBmp.Show()
         self.imageViewer.Update()
         
