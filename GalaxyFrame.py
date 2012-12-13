@@ -149,7 +149,9 @@ class GalaxyFrame(wx.Frame):
             else:
                 self.BlinkSurface()
         elif self.configureGame == 5:
-            if keycode is not 13: # rwruen pressed
+            if keycode is not 13: # return not pressed
+                print "record keystrokes to get the name"
+                print "possibly also count keystrokes and stop when reach 8"
                 
             print "record keystrokes here for name."
             print "store the name and world designator in the respective field"
