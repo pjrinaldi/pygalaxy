@@ -34,6 +34,7 @@ class GalaxyFrame(wx.Frame):
         self.numTurns = 0
         self.neutralBuild = 0
         self.newSetup = 0
+        self.playerCount = 1
         self.playerNames = []
         self.playerWorlds = []
         self.mainImage = Image.new('L', self.GetSize())
@@ -129,7 +130,12 @@ class GalaxyFrame(wx.Frame):
                     self.neutralBuild = 1
                 else:
                     self.neutralBuild= 0
+                self.configureGame = 5
+                self.AddText(''.join([self.playerNameText[0], str(i+1), self.playerNameText[1], self.worldList[i], self.playerNameText[2]]), 0)
+                self.AddText(self.playerNameText[3], 1)
+                self.BlitTextSurface()
                 # the loop works, but i need to do the loop for each configuregame function and break out...
+                '''
                 for i in range(self.numPlayers): # (i+1) is each player to set their name and world.
                     self.AddText(''.join([self.playerNameText[0], str(i+1), self.playerNameText[1], self.worldList[i], self.playerNameText[2]]), 0)
                     self.AddText(self.playerNameText[3], 1)
@@ -139,9 +145,18 @@ class GalaxyFrame(wx.Frame):
                     if i == range(self.numPlayers):
                         self.configureGame = 5
                         print "name config is done."
+                '''
             else:
                 self.BlinkSurface()
-            
+        elif self.configureGame == 5:
+            if keycode is not 13: # rwruen pressed
+                
+            print "record keystrokes here for name."
+            print "store the name and world designator in the respective field"
+            print "iterate playerCount variable ++"
+            print "set configureGame back to 4"
+            print "if playerCount <= numPlayers: do what i need and go back to 4"
+            print "otherwise do what i need and goto 6 to move on to the universe creation"
         event.Skip()
 
     def AddText(self, currentText, currentLine):
