@@ -32,11 +32,11 @@ class GalaxyFrame(wx.Frame):
         self.numPlayers = 0
         self.numWorlds = 0
         self.numTurns = 0
-        self.neutralBuild = 0
+        self.neutralBuild = -1
         self.newSetup = 0
         self.playerCount = 1
         self.playerNames = []
-        self.playerWorlds = []
+        self.playerWorlds = [] # might not need if i cna just use worldlist 
         self.mainImage = Image.new('L', self.GetSize())
         self.mainDraw = ImageDraw.Draw(self.mainImage)
         self.AddTitleText(self.titleText)
@@ -130,25 +130,34 @@ class GalaxyFrame(wx.Frame):
                     self.neutralBuild = 1
                 else:
                     self.neutralBuild= 0
-                self.configureGame = 5
-                self.AddText(''.join([self.playerNameText[0], str(self.playerCount), self.playerNameText[1], self.worldList[self.playerCount - 1], self.playerNameText[2]]), 0)
-                self.AddText(self.playerNameText[3], 1)
-                self.BlitTextSurface()
+                    self.configureGame = 5
+                    self.AddText(''.join([self.playerNameText[0], str(self.playerCount), self.playerNameText[1], self.worldList[self.playerCount - 1], self.playerNameText[2]]), 0)
+                    self.AddText(self.playerNameText[3], 1)
+                    self.BlitTextSurface()
             else:
                 self.BlinkSurface()
         elif self.configureGame == 5:
-            if keycode is not 13: # return not pressed
+            if keycode is not 13 and len(self.keyStrokesList) < 8: # return not pressed
                 self.keyStrokesList.append(chr(keycode))
-                print "record keystrokes to get the name"
-                print "possibly also count keystrokes and stop when reach 8"
             else:
-                print ''.join(self.keyStrokesList)
-            print "record keystrokes here for name."
-            print "store the name and world designator in the respective field"
-            print "iterate playerCount variable ++"
-            print "set configureGame back to 4"
-            print "if playerCount <= numPlayers: do what i need and go back to 4"
-            print "otherwise do what i need and goto 6 to move on to the universe creation"
+                if self.playerCount < self.numPlayers:
+                    self.playerNames.append(''.join(self.keyStrokesList))
+                    # self.playerWorlds.append(self.worldList[self.playerCount - 1]) # might not need if we can just call worldList when needed
+                    self.keyStrokesList = []
+                    self.playerCount += 1
+                    self.AddText(''.join([self.playerNameText[0], str(self.playerCount), self.playerNameText[1], self.worldList[self.playerCount - 1], self.playerNameText[2]]), 0)
+                    self.AddText(self.playerNameText[3], 1)
+                    self.BlitTextSurface()
+                elif self.playerCount == self.numPlayers:
+                    self.playerNames.append(''.join(self.keyStrokesList))
+                    # self.playerWorlds.append(self.worldList[self.playerCount - 1]) # might not need if we can just call worldList when needed
+                    self.keyStrokesList= []
+                    self.configureGame = 6
+                    self.AddText(self.universeCreateText, 0)
+                    self.BlitTextSurface()
+                    self.CreateUniverse()
+        elif self.configureGame == 6:
+            print self.playerNames
         event.Skip()
 
     def AddText(self, currentText, currentLine):
