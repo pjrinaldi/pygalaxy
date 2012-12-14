@@ -131,28 +131,18 @@ class GalaxyFrame(wx.Frame):
                 else:
                     self.neutralBuild= 0
                 self.configureGame = 5
-                self.AddText(''.join([self.playerNameText[0], str(i+1), self.playerNameText[1], self.worldList[i], self.playerNameText[2]]), 0)
+                self.AddText(''.join([self.playerNameText[0], str(self.playerCount), self.playerNameText[1], self.worldList[self.playerCount - 1], self.playerNameText[2]]), 0)
                 self.AddText(self.playerNameText[3], 1)
                 self.BlitTextSurface()
-                # the loop works, but i need to do the loop for each configuregame function and break out...
-                '''
-                for i in range(self.numPlayers): # (i+1) is each player to set their name and world.
-                    self.AddText(''.join([self.playerNameText[0], str(i+1), self.playerNameText[1], self.worldList[i], self.playerNameText[2]]), 0)
-                    self.AddText(self.playerNameText[3], 1)
-                    self.BlitTextSurface()
-                    # need a variable to allow me to capture name of person, iterator i am on, and then return to this spot and conitue my loop
-                    break
-                    if i == range(self.numPlayers):
-                        self.configureGame = 5
-                        print "name config is done."
-                '''
             else:
                 self.BlinkSurface()
         elif self.configureGame == 5:
             if keycode is not 13: # return not pressed
+                self.keyStrokesList.append(chr(keycode))
                 print "record keystrokes to get the name"
                 print "possibly also count keystrokes and stop when reach 8"
-                
+            else:
+                print ''.join(self.keyStrokesList)
             print "record keystrokes here for name."
             print "store the name and world designator in the respective field"
             print "iterate playerCount variable ++"
