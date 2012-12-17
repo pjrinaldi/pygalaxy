@@ -47,12 +47,12 @@ class GalaxyFrame(wx.Frame):
         self.Show(True)
     def CaptureKeys(self, event):
         keycode = event.GetKeyCode()
-        if self.configureGame == 0:
+        if self.configureGame == 0: # ask for number of players.
             self.keyStrokesList = []
             self.configureGame = 1
             self.AddText(self.numPlayerText, 0)
             self.BlitTextSurface()
-        elif self.configureGame == 1:
+        elif self.configureGame == 1: # ask for the number of worlds.
             if keycode > 47 and keycode < 58:
                 self.keyStrokesList.append(keycode - 48)
             elif keycode == 13:
@@ -75,7 +75,7 @@ class GalaxyFrame(wx.Frame):
                 else:
                     self.BlinkSurface()
                     self.keyStrokesList = []
-        elif self.configureGame == 2:
+        elif self.configureGame == 2: # ask for the number of turns.
             if keycode > 47 and keycode < 58: # number 1 thru 0 pressed
                 self.keyStrokesList.append(keycode - 48)
             elif keycode == 13: # return pressed
@@ -99,7 +99,7 @@ class GalaxyFrame(wx.Frame):
                 else:
                     self.BlinkSurface()
                     self.keyStrokesList = []
-        elif self.configureGame == 3:
+        elif self.configureGame == 3: # ask for neutral build
             if keycode > 47 and keycode < 58: # number 1 thru 0 pressed
                 self.keyStrokesList.append(keycode - 48)
             elif keycode == 13: # return pressed
@@ -124,19 +124,19 @@ class GalaxyFrame(wx.Frame):
                 else:
                     self.BlinkSurface()
                     self.keyStrokesList = []
-        elif self.configureGame == 4:
+        elif self.configureGame == 4: # ask for playername(s)
             if keycode == 121 or keycode == 89 or keycode == 110 or keycode == 78: # y Y n N
                 if keycode == 121 or keycode == 89:
                     self.neutralBuild = 1
                 else:
                     self.neutralBuild= 0
-                    self.configureGame = 5
-                    self.AddText(''.join([self.playerNameText[0], str(self.playerCount), self.playerNameText[1], self.worldList[self.playerCount - 1], self.playerNameText[2]]), 0)
-                    self.AddText(self.playerNameText[3], 1)
-                    self.BlitTextSurface()
+                self.configureGame = 5
+                self.AddText(''.join([self.playerNameText[0], str(self.playerCount), self.playerNameText[1], self.worldList[self.playerCount - 1], self.playerNameText[2]]), 0)
+                self.AddText(self.playerNameText[3], 1)
+                self.BlitTextSurface()
             else:
                 self.BlinkSurface()
-        elif self.configureGame == 5:
+        elif self.configureGame == 5: # get all playernames and then create universe
             if keycode is not 13 and len(self.keyStrokesList) < 8: # return not pressed
                 self.keyStrokesList.append(chr(keycode))
             else:
