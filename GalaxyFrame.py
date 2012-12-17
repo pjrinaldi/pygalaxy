@@ -1,6 +1,7 @@
 from wx import wx
 from PIL import Image, ImageFont, ImageDraw
 import time
+import random
 
 class GalaxyFrame(wx.Frame):
     
@@ -36,7 +37,8 @@ class GalaxyFrame(wx.Frame):
         self.newSetup = 0
         self.playerCount = 1
         self.playerNames = []
-        self.playerWorlds = [] # might not need if i cna just use worldlist 
+        self.playerWorlds = [] # might not need if i cna just use worldlist
+        self.universeMap = []
         self.mainImage = Image.new('L', self.GetSize())
         self.mainDraw = ImageDraw.Draw(self.mainImage)
         self.AddTitleText(self.titleText)
@@ -156,7 +158,7 @@ class GalaxyFrame(wx.Frame):
                     self.AddText(self.universeCreateText, 0)
                     self.BlitTextSurface()
                     self.CreateUniverse()
-        elif self.configureGame == 6:
+        elif self.configureGame == 6: # show universe, ask for new setup
             print self.playerNames
         event.Skip()
 
@@ -194,4 +196,20 @@ class GalaxyFrame(wx.Frame):
         
     def CreateUniverse(self):
         print "create universe algorithm here.  should be a multi matrix of [20x20]"
-        
+        self.universeMap.append(["**", "**", "**", "**", "**", "**", "**", "* ", "ST", "AR", " M", "AP", " *", "**", "**", "**", "**", "**", "**", "* "])
+        for i in range(20):
+            self.universeMap.append([": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": "])
+        # general empty map is created. now to populate with the number of worlds.
+        for i in range(self.numWorlds):
+            print i
+            
+    def GetRandomCoordinate(self):
+        self.CoordinateCount = []
+        for i in self.numWorlds:
+            tmpCoord = [random.randint(1,20), random.randint(1,20)]
+            for coord in self.CoordinateCount:
+                if tmpCoord == coord:
+                    break
+                else
+                    
+            
