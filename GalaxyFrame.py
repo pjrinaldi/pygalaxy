@@ -14,8 +14,8 @@ class GalaxyFrame(wx.Frame):
         self.mainBox = wx.BoxSizer(wx.VERTICAL)
         self.mainBox.Add(self.imageViewer, 1, wx.ALL | wx.EXPAND | wx.ALIGN_LEFT)
         self.SetSizer(self.mainBox)
-        self.titleFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 48)
-        self.gameFont = ImageFont.truetype("./resources/C64_Pro_v1.0-STYLE.ttf", 12)
+        self.titleFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 48)
+        self.gameFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
         self.keyStrokesList = []
         
         self.titleText = "PYTHON GALAXY!"
@@ -214,7 +214,7 @@ class GalaxyFrame(wx.Frame):
                     tmpCheck = 1
         self.AddText(self.universeTitle, 0, 1)
         for index, row in enumerate(self.universeMap):
-            self.AddText(' '.join(row), index + 1, 1)
+            self.AddText(''.join(row), index + 1, 1)
         self.AddText(self.askNewSetupText, len(self.universeMap) + 1, 1)
         self.BlitTextSurface()
     def GetRandomCoordinate(self):
