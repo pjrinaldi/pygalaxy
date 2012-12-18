@@ -203,10 +203,10 @@ class GalaxyFrame(wx.Frame):
         for i in range(self.numWorlds):
             print i
             tmpCoord = self.GetRandomCoordinate()
-            if self.universeMap[tmpCoord[0]][tmpCoord[1]] == ":" or self.universeMap[tmpCoord[0]][tmpCoord[1]] == " ":
-                self.universeMap[tmpCoord[0]][tmpCoord[0]] = self.worldList[i]
-            else:
-                return
+            while self.universeMap[tmpCoord[0]][tmpCoord[1]] is not ":" or self.universeMap[tmpCoord[0]][tmpCoord[1]] is not " ":
+                tmpCoord = self.GetRandomCoordinate()
+            self.universeMap[tmpCoord[0]][tmpCoord[1]] = self.worldList[i]
+             
         for row in self.universeMap:
             print row
         
