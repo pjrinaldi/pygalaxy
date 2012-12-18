@@ -38,6 +38,7 @@ class GalaxyFrame(wx.Frame):
         self.playerCount = 1
         self.playerNames = []
         self.playerWorlds = [] # might not need if i cna just use worldlist
+        self.universeTitle = "*************** STAR MAP **************"
         self.universeMap = []
         self.mainImage = Image.new('L', self.GetSize())
         self.mainDraw = ImageDraw.Draw(self.mainImage)
@@ -162,10 +163,11 @@ class GalaxyFrame(wx.Frame):
             print self.playerNames
         event.Skip()
 
-    def AddText(self, currentText, currentLine):
+    def AddText(self, currentText, currentLine, top=0):
         self.tmpSize = self.mainDraw.textsize(currentText, font=self.gameFont)
         self.tmpWidth = self.GetSizeTuple()[0]/2 - self.tmpSize[0]/2
-        self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLine)
+        if top == 0: self.tmpHeight = self.GetSizeTuple()[1]/2 - self.tmpSize[1]/2 - 50 + (25 * currentLine)
+        else: self.tmpHeight = 10 + (25 * currentLine)
         if currentLine == 0: self.mainDraw.rectangle((0, 0, self.GetSizeTuple()[0], self.GetSizeTuple()[1]), fill="black", outline=None)
         self.mainDraw.text((self.tmpWidth, self.tmpHeight), currentText, font=self.gameFont, fill=171)
 
@@ -196,20 +198,25 @@ class GalaxyFrame(wx.Frame):
         
     def CreateUniverse(self):
         print "create universe algorithm here.  should be a multi matrix of [20x20]"
-        self.universeMap.append(["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " ", "S", "T", "A", "R", " ", "M", "A", "P", " ", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " "])
+        # NEED TO WORK ON STANDARDIZED UNIFORM COLUMN LAYOUTS
+        # self.universeMap.append(["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " ", "S", "T", "A", "R", " ", "M", "A", "P", " ", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " "])
         for i in range(20):
             self.universeMap.append([":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " "])
         # general empty map is created. now to populate with the number of worlds.
         for i in range(self.numWorlds):
+            tmpCheck = 0
             print i
-            tmpCoord = self.GetRandomCoordinate()
-            while self.universeMap[tmpCoord[0]][tmpCoord[1]] is not ":" or self.universeMap[tmpCoord[0]][tmpCoord[1]] is not " ":
+            while tmpCheck == 0:
                 tmpCoord = self.GetRandomCoordinate()
-            self.universeMap[tmpCoord[0]][tmpCoord[1]] = self.worldList[i]
-             
-        for row in self.universeMap:
-            print row
-        
+                print tmpCoord
+                if self.universeMap[tmpCoord[0]][tmpCoord[1]] is not ":" or self.universeMap[tmpCoord[0]][tmpCoord[1]] is not " ":
+                    self.universeMap[tmpCoord[0]][tmpCoord[1]] = self.worldList[i]
+                    tmpCheck = 1
+        self.AddText(self.universeTitle, 0, 1)
+        for index, row in enumerate(self.universeMap):
+            self.AddText(' '.join(row), index + 1, 1)
+        self.AddText(self.askNewSetupText, len(self.universeMap) + 1, 1)
+        self.BlitTextSurface()
     def GetRandomCoordinate(self):
-        tmpCoord = [random.randint(1,20), random.randint(0,39)]
+        tmpCoord = [random.randint(0,19), random.randint(0,39)]
         return tmpCoord
