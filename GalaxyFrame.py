@@ -202,16 +202,11 @@ class GalaxyFrame(wx.Frame):
         # general empty map is created. now to populate with the number of worlds.
         for i in range(self.numWorlds):
             print i
+            print self.GetRandomCoordinate()
             
     def GetRandomCoordinate(self):
-        self.CoordinateCount = []
-        for i in self.numWorlds:
-            duplicate = 0
-            tmpCoord = [random.randint(1,20), random.randint(1,20)]
-            for coord in self.CoordinateCount:
-                if tmpCoord == coord:
-                    duplicate = 1
-                if duplicate == 0:
-                    self.coordCount[tmpCoord[0], tmpCoord[1]] = self.worldList[i]
+        tmpCoord = [random.randint(1,20), random.randint(1,20)]
+        return tmpCoord
+        
                     
             
