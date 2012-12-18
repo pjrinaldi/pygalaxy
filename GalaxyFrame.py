@@ -196,17 +196,20 @@ class GalaxyFrame(wx.Frame):
         
     def CreateUniverse(self):
         print "create universe algorithm here.  should be a multi matrix of [20x20]"
-        self.universeMap.append(["**", "**", "**", "**", "**", "**", "**", "* ", "ST", "AR", " M", "AP", " *", "**", "**", "**", "**", "**", "**", "* "])
+        self.universeMap.append(["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " ", "S", "T", "A", "R", " ", "M", "A", "P", " ", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " "])
         for i in range(20):
-            self.universeMap.append([": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": ", ": "])
+            self.universeMap.append([":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " "])
         # general empty map is created. now to populate with the number of worlds.
         for i in range(self.numWorlds):
             print i
-            print self.GetRandomCoordinate()
-            
-    def GetRandomCoordinate(self):
-        tmpCoord = [random.randint(1,20), random.randint(1,20)]
-        return tmpCoord
+            tmpCoord = self.GetRandomCoordinate()
+            if self.universeMap[tmpCoord[0]][tmpCoord[1]] == ":" or self.universeMap[tmpCoord[0]][tmpCoord[1]] == " ":
+                self.universeMap[tmpCoord[0]][tmpCoord[0]] = self.worldList[i]
+            else:
+                return
+        for row in self.universeMap:
+            print row
         
-                    
-            
+    def GetRandomCoordinate(self):
+        tmpCoord = [random.randint(1,20), random.randint(0,39)]
+        return tmpCoord
