@@ -28,7 +28,7 @@ class GalaxyFrame(wx.Frame):
         self.askNewSetupText = "NEW SETUP?"
         self.universeReCreateText = "PLEASE WAIT WHILE I REARRANGE THE STARS"
         self.gameSetupText = "NOW WAIT WHILE I SETUP THE GAME"
-        self.worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
+        self.worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
         self.configureGame = 0
         self.numPlayers = 0
         self.numWorlds = 0
@@ -206,10 +206,12 @@ class GalaxyFrame(wx.Frame):
     def GetRandomCoordinate(self):
         self.CoordinateCount = []
         for i in self.numWorlds:
+            duplicate = 0
             tmpCoord = [random.randint(1,20), random.randint(1,20)]
             for coord in self.CoordinateCount:
                 if tmpCoord == coord:
-                    break
-                else
+                    duplicate = 1
+                if duplicate == 0:
+                    self.coordCount[tmpCoord[0], tmpCoord[1]] = self.worldList[i]
                     
             
