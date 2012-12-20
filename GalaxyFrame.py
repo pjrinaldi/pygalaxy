@@ -171,6 +171,10 @@ class GalaxyFrame(wx.Frame):
                     self.CreateUniverse()
                 else:
                     self.configureGame = 7
+                    self.AddText(self.gameSetupText, 0)
+                    self.BlitTextSurface()
+                    self.imageViewer.Update()
+                    time.sleep((0.2 * self.numWorlds) + (0.2 * self.numPlayers) + (0.2 * self.numTurns))
                     print "display new text for playing the game"
             print self.playerNames
         event.Skip()
@@ -223,12 +227,20 @@ class GalaxyFrame(wx.Frame):
                 if self.universeMap[tmpCoord[0]][tmpCoord[1]] is not ":" or self.universeMap[tmpCoord[0]][tmpCoord[1]] is not " ":
                     self.universeMap[tmpCoord[0]][tmpCoord[1]] = self.worldList[i]
                     tmpCheck = 1
+        # display universe on screen
         self.AddText(self.universeTitle, 0, 1)
         for index, row in enumerate(self.universeMap):
             self.AddText(''.join(row), index + 1, 1)
+            self.BlitTextSurface()
+            self.imageViewer.Update()
+            time.sleep(0.5)
+            self.imageViewer.Update( )
         self.AddText(self.askNewSetupText, len(self.universeMap) + 1, 1)
         self.BlitTextSurface()
         
     def GetRandomCoordinate(self):
         tmpCoord = [random.randint(0,19), random.randint(0,38)]
         return tmpCoord
+    
+    def InputTurn(self, tmpPlayer, tmpWorld):
+        pass
