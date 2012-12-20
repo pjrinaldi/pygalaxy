@@ -160,6 +160,12 @@ class GalaxyFrame(wx.Frame):
                     self.BlitTextSurface()
                     self.CreateUniverse()
         elif self.configureGame == 6: # show universe, ask for new setup
+            if keycode == 121 or keycode == 89 or keycode == 110 or keycode == 78: # y Y n N
+                if keycode == 121 or keycode == 89:
+                    self.ReCreateUniverse()
+                else:
+                    self.configureGame = 7
+                    print "display new text for playing the game"
             print self.playerNames
         event.Skip()
 
@@ -215,6 +221,9 @@ class GalaxyFrame(wx.Frame):
             self.AddText(''.join(row), index + 1, 1)
         self.AddText(self.askNewSetupText, len(self.universeMap) + 1, 1)
         self.BlitTextSurface()
+        
+    def ReCreateUniverse(self):
+        print "redo universe here"
         
     def GetRandomCoordinate(self):
         tmpCoord = [random.randint(0,19), random.randint(0,39)]
