@@ -158,11 +158,17 @@ class GalaxyFrame(wx.Frame):
                     self.configureGame = 6
                     self.AddText(self.universeCreateText, 0)
                     self.BlitTextSurface()
+                    self.imageViewer.Update()
+                    time.sleep((0.2 * self.numWorlds))
                     self.CreateUniverse()
         elif self.configureGame == 6: # show universe, ask for new setup
             if keycode == 121 or keycode == 89 or keycode == 110 or keycode == 78: # y Y n N
                 if keycode == 121 or keycode == 89:
-                    self.ReCreateUniverse()
+                    self.AddText(self.universeReCreateText, 0)
+                    self.BlitTextSurface()
+                    self.imageViewer.Update()
+                    time.sleep((0.2 * self.numWorlds))
+                    self.CreateUniverse()
                 else:
                     self.configureGame = 7
                     print "display new text for playing the game"
@@ -203,6 +209,7 @@ class GalaxyFrame(wx.Frame):
         self.imageViewer.Update()
         
     def CreateUniverse(self):
+        self.universeMap = []
         print "create universe algorithm here.  should be a multi matrix of [20x20]"
         for i in range(20):
             self.universeMap.append([":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":"])
@@ -222,9 +229,6 @@ class GalaxyFrame(wx.Frame):
         self.AddText(self.askNewSetupText, len(self.universeMap) + 1, 1)
         self.BlitTextSurface()
         
-    def ReCreateUniverse(self):
-        print "redo universe here"
-        
     def GetRandomCoordinate(self):
-        tmpCoord = [random.randint(0,19), random.randint(0,39)]
+        tmpCoord = [random.randint(0,19), random.randint(0,38)]
         return tmpCoord
