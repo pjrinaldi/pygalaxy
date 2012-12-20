@@ -198,8 +198,6 @@ class GalaxyFrame(wx.Frame):
         
     def CreateUniverse(self):
         print "create universe algorithm here.  should be a multi matrix of [20x20]"
-        # NEED TO WORK ON STANDARDIZED UNIFORM COLUMN LAYOUTS
-        # self.universeMap.append(["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " ", "S", "T", "A", "R", " ", "M", "A", "P", " ", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " "])
         for i in range(20):
             self.universeMap.append([":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":"])
         # general empty map is created. now to populate with the number of worlds.
@@ -217,6 +215,7 @@ class GalaxyFrame(wx.Frame):
             self.AddText(''.join(row), index + 1, 1)
         self.AddText(self.askNewSetupText, len(self.universeMap) + 1, 1)
         self.BlitTextSurface()
+        
     def GetRandomCoordinate(self):
         tmpCoord = [random.randint(0,19), random.randint(0,39)]
         return tmpCoord
