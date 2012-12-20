@@ -201,7 +201,7 @@ class GalaxyFrame(wx.Frame):
         # NEED TO WORK ON STANDARDIZED UNIFORM COLUMN LAYOUTS
         # self.universeMap.append(["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " ", "S", "T", "A", "R", " ", "M", "A", "P", " ", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", " "])
         for i in range(20):
-            self.universeMap.append([":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " "])
+            self.universeMap.append([":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":", " ", ":"])
         # general empty map is created. now to populate with the number of worlds.
         for i in range(self.numWorlds):
             tmpCheck = 0
