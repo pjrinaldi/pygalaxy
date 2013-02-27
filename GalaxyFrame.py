@@ -177,6 +177,22 @@ class GalaxyFrame(wx.Frame):
                     time.sleep((0.2 * self.numWorlds) + (0.2 * self.numPlayers) + (0.2 * self.numTurns))
                     print "display new text for playing the game"
             print self.playerNames
+        elif self.configureGame == 7: # start gameplay functionality for game
+            # need to first take into account which turn i'm in.  possibly run that in a rungame function
+            # once run game is called, it sets a new bind function for the imageviewer for keypress which will allow me to start something
+            # for capturing other than the current capturekeys function which is pretty long.
+            
+            # then i need to break down functions for each turn:
+            # In 1 turn, the following happens:
+            # 1. for each player,  input the ships to move from 1 world to another world.
+            # 2. store this information to use when i get to a future turn where it becomes relevant.
+            # 3. prior to any turns, when setup the game, I need to figure out a formula to determine how many turns it will take to 
+            #    before the results of a move occur
+            # 4. after a person inputs a turn, store the information of the turn as well as what turn this action occurs.
+            # 5. i will need to store all this turn information in a variable so i can use it as need be.
+            print self.universeMap
+            
+            print "start game now"
         event.Skip()
 
     def AddText(self, currentText, currentLine, top=0):
