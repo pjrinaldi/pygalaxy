@@ -190,7 +190,11 @@ class GalaxyFrame(wx.Frame):
             #    before the results of a move occur
             # 4. after a person inputs a turn, store the information of the turn as well as what turn this action occurs.
             # 5. i will need to store all this turn information in a variable so i can use it as need be.
-            print self.universeMap
+            # 6. NEED TO STORE ACTUAL WORLDS AND THEIR COORDINATE POSITION IN A VARIABLE I CAN USE TO CALCULATE TURN INFORMATION
+            # HAVE SELF.NUMWORLDS TO GIVE LENGTH OF USEFUL WORLDS TO STORE COORDINATES FOR
+            # HAVE SELF.WORLDLIST TO STORE WHICH WORLD GOES WHERE, AS IN A,B,C,D,E
+            # ONCE I HAVE THE COORD FOR EACH RELEVANT WORLD STORED, I CAN USE THAT TO CALCULATE HOW LONG IT WILL TAKE.
+            # THEN I NEED TO LEARN TO STORE EACH TURN INFORMATION TO I CAN KEEP UP WITH WORLD NUMBER COUNTS
             
             print "start game now"
         event.Skip()
