@@ -37,7 +37,7 @@ class GalaxyFrame(wx.Frame):
         self.newSetup = 0
         self.playerCount = 1
         self.playerNames = []
-        self.worldLocations = [] # occupied worlds and their locations on the star map
+        self.worldLocations = dict() # occupied worlds and their locations on the star map
         self.playerWorlds = [] # might not need if i cna just use worldlist
         self.universeTitle = "*************** STAR MAP **************"
         self.universeMap = []
@@ -249,7 +249,7 @@ class GalaxyFrame(wx.Frame):
                 print tmpCoord
                 if self.universeMap[tmpCoord[0]][tmpCoord[1]] is not ":" or self.universeMap[tmpCoord[0]][tmpCoord[1]] is not " ":
                     self.universeMap[tmpCoord[0]][tmpCoord[1]] = self.worldList[i]
-                    self.worldLocations.append(tmpCoord)
+                    self.worldLocations[self.worldList[i]] = tmpCoord
                     tmpCheck = 1
         # display universe on screen
         self.DisplayUniverse()
@@ -276,4 +276,5 @@ class GalaxyFrame(wx.Frame):
     def CalculateTimeDistance(self, fromTmpWorld, toTmpWorld):
         # determine distance between two planets
         print self.worldLocations
+        # now i have the world and its position.  I can simply take the difference in values to determine the number of turns to get to a world.
         
