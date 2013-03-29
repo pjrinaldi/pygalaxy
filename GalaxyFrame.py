@@ -37,6 +37,7 @@ class GalaxyFrame(wx.Frame):
         self.newSetup = 0
         self.playerCount = 1
         self.playerNames = []
+        self.worldLocations = [] # occupied worlds and their locations on the star map
         self.playerWorlds = [] # might not need if i cna just use worldlist
         self.universeTitle = "*************** STAR MAP **************"
         self.universeMap = []
@@ -178,6 +179,8 @@ class GalaxyFrame(wx.Frame):
                     print "display new text for playing the game"
             print self.playerNames
         elif self.configureGame == 7: # start gameplay functionality for game
+            print self.universeMap
+            print self.worldLocations
             # need to first take into account which turn i'm in.  possibly run that in a rungame function
             # once run game is called, it sets a new bind function for the imageviewer for keypress which will allow me to start something
             # for capturing other than the current capturekeys function which is pretty long.
@@ -246,17 +249,14 @@ class GalaxyFrame(wx.Frame):
                 print tmpCoord
                 if self.universeMap[tmpCoord[0]][tmpCoord[1]] is not ":" or self.universeMap[tmpCoord[0]][tmpCoord[1]] is not " ":
                     self.universeMap[tmpCoord[0]][tmpCoord[1]] = self.worldList[i]
+                    self.worldLocations.append(tmpCoord)
                     tmpCheck = 1
         # display universe on screen
-        self.AddText(self.universeTitle, 0, 1)
-        for index, row in enumerate(self.universeMap):
-            self.AddText(''.join(row), index + 1, 1)
-            self.BlitTextSurface()
-            self.imageViewer.Update()
-            time.sleep(0.5)
-            self.imageViewer.Update( )
+        self.DisplayUniverse()
+        # prompt for new setup
         self.AddText(self.askNewSetupText, len(self.universeMap) + 1, 1)
-        self.BlitTextSurface()
+        # push all text to screen
+        self.BlitTextSurface()                
         
     def GetRandomCoordinate(self):
         tmpCoord = [random.randint(0,19), random.randint(0,38)]
@@ -264,3 +264,16 @@ class GalaxyFrame(wx.Frame):
     
     def InputTurn(self, tmpPlayer, tmpWorld):
         pass
+    def DisplayUniverse(self):
+        # display universe on the screen
+        self.AddText(self.universeTitle, 0, 1)
+        for index, row in enumerate(self.universeMap):
+            self.AddText(''.join(row), index + 1, 1)
+            self.BlitTextSurface()
+            self.imageViewer.Update()
+            time.sleep(0.5)
+            self.imageViewer.Update()
+    def CalculateTimeDistance(self, fromTmpWorld, toTmpWorld):
+        # determine distance between two planets
+        print self.worldLocations
+        
