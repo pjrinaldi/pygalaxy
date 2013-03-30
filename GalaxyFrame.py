@@ -277,4 +277,3 @@ class GalaxyFrame(wx.Frame):
         # determine distance between two planets
         print self.worldLocations
         # now i have the world and its position.  I can simply take the difference in values to determine the number of turns to get to a world.
-        

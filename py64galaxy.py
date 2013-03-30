@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# import statements
+import pygame, random, sys
+'''
 # From Statements
 
 # Import Statements
@@ -21,6 +24,7 @@ class GalaxyApp(wx.App):
 # Create Main Application and Run It
 app = GalaxyApp(redirect=False)
 app.MainLoop()
+'''
 '''
 import pygame, os, sys, string
 from pygame.locals import *
