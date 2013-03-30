@@ -2,6 +2,58 @@
 
 # import statements
 import pygame, random, sys
+
+# from statements
+from pygame.locals import *
+
+# constant variables
+WINDOWWIDTH = 640
+WINDOWHEIGHT = 480
+BACKGROUNDCOLOR = (0, 0, 0)
+TEXTCOLOR = (171, 171, 171)
+FPS = 40
+
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+def drawText(text, font, surface, x, y):
+    textobj = font.render(text, 1, TEXTCOLOR)
+    textrect = textobj.get_rect()
+    textrect.topleft = (x, y)
+    surface.blit(textobj, textrect)
+
+
+pygame.init()
+'''
+    self.titleFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 48)
+    self.gameFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
+    self.keyStrokesList = []
+    self.titleText = "PYTHON GALAXY!"
+    self.numPlayerText = "HOW MANY PLAYERS (1-20)?"
+    self.numWorldsText = "HOW MANY WORLDS (5-40)?"
+    self.numTurnsText = "HOW MANY YEARS (TURNS) IN THE GAME (1-100)?"
+    self.neutralBuildText = "DO YOU WANT THE NEUTRAL WORLDS TO BUILD DEFENSIVE SHIPS?"
+    self.playerNameText = ["FLEET ADMIRAL ", " WILL BEGIN THE GAME IN CONTROL OF WORLD:(", ")", "WHAT NAME WILL THIS FLEET ADMIRAL USE (1 TO 8 CHARACTERS)?"]
+    self.universeCreateText = "PLEASE WAIT WHILE I CREATE THE UNIVERSE"
+    self.askNewSetupText = "NEW SETUP?"
+    self.universeReCreateText = "PLEASE WAIT WHILE I REARRANGE THE STARS"
+    self.gameSetupText = "NOW WAIT WHILE I SETUP THE GAME"
+    self.worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
+    self.configureGame = 0
+    self.numPlayers = 0
+    self.numWorlds = 0
+    self.numTurns = 0
+    self.neutralBuild = -1
+    self.newSetup = 0
+    self.playerCount = 1
+    self.playerNames = []
+    self.worldLocations = dict() # occupied worlds and their locations on the star map
+    self.playerWorlds = [] # might not need if i cna just use worldlist
+    self.universeTitle = "*************** STAR MAP **************"
+    self.universeMap = []
+'''
+
 '''
 # From Statements
 
