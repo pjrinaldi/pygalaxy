@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 # import statements
+import sys
+
+print sys.path
 import pygame, random, sys
 
 # from statements
@@ -26,6 +29,7 @@ def drawText(text, font, surface, x, y):
 
 pygame.init()
 mainClock = pygame.time.Clock()
+
 '''
     self.titleFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 48)
     self.gameFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
