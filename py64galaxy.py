@@ -69,6 +69,10 @@ waitForKeyPress()
 
 # Game Loop
 while True:
+    
+    # CREATE A FUNCTION FOR STARTER INFORMATION.  COLLECTINFO(INCREMENT)
+    # AS I COLLECT INFO, INCREMENT THE VALUE OF INCREMENT AND USE THAT TO DISPLAY THE VARIOUS TEXT AND RECEIVE INPUTS FROM USER
+    # THEN I CAN GET INTO THE GAME LOOP, ONCE I COLLECT THE REQUIRED INFORMATION
     keyStrokesList = []
     numPlayers = 0
     worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
