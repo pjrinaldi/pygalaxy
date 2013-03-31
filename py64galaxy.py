@@ -10,10 +10,30 @@ BACKGROUNDCOLOR = (0, 0, 0)
 TEXTCOLOR = (171, 171, 171)
 FPS = 40
 BLINKER = True
+SETUPTEXT = ["HOW MANY PLAYERS (1-20)?", "HOW MANY WORLDS (5-40)?", "HOW MANY YEARS (TURNS) IN THE GAME (1-100)?", "DO YOU WANT THE NEUTRAL WORLDS TO BUILD DEFENSIVE SHIPS?", "NEW SETUP?"]
+PLAYERNAMETEXT = ["FLEET ADMIRAL ", " WILL BEGIN THE GAME IN CONTROL OF WORLD:(", ")", "WHAT NAME WILL THIS FLEET ADMIRAL USE (1 TO 8 CHARACTERS)?"]
+UNIVERSECREATETEXT = "PLEASE WAIT WHILE I CREATE THE UNIVERSE"
+UNIVERSERECREATETEXT = "PLEASE WAIT WHILE I REARRANGE THE STARS"
+GAMESETUPTEXT = "NOW WAIT WHILE I SETUP THE GAME"
+WORLDLIST = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
+UNIVERSETITLE = "*************** STAR MAP **************"
+
 testString = []
 testReturn = ""
 
 # game variables
+setupVariables = {"numberPlayers": 0, "numberWorlds": 0, "numberTurns": 0, "neutralBuild": -1, "newSetup": 0}
+# configureGame = 0
+# numberPlayers = 0
+# numberWorlds = 0
+# numberTurns = 0
+# neutralBuild = -1
+# newSetup = 0
+# playerCount = 1
+playerNames = []
+worldLocations = dict() # occupied worlds and their locations on the star map
+playerWorlds = [] # might not need if i can use worldlist
+universeMap = []
 
 # functions
 def terminate():
@@ -58,7 +78,15 @@ def waitForReturn(tmpString):
                 elif event.key <= 127:
                     tmpString.append(chr(event.key))
             
-
+def collectInput(tmpString, BLINKER):
+    tmpCharArray = []
+    # BEGIN LOOP SEQUENCE TO COLLECT GAME SETUP INFORAMTION
+    windowSurface.fill(BACKGROUNDCOLOR)
+    drawText(tmpString, font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
+    BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+    pygame.display.update()
+    return waitForReturn(tmpCharArray)
+    
 
 # set up pygame, the window, and the mouse cursor
 pygame.init()
@@ -85,28 +113,18 @@ drawText('Press a key to start.', font, windowSurface, (WINDOWWIDTH / 3) - 30, (
 pygame.display.update()
 waitForKeyPress()
 
-# BEGIN LOOP SEQUENCE TO COLLECT GAME SETUP INFORAMTION
-windowSurface.fill(BACKGROUNDCOLOR)
-drawText('Enter Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
-BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
-pygame.display.update()
-testReturn = waitForReturn(testString)
-print testReturn
-# END LOOP SEQUENCE
-
+# collect setup information
+setupVariables["numberPlayers"] = collectInput(SETUPTEXT[0], BLINKER)
+print setupVariables
 
 # Game Loop
 while True:
-    
     # CREATE A FUNCTION FOR STARTER INFORMATION.  COLLECTINFO(INCREMENT)
     # AS I COLLECT INFO, INCREMENT THE VALUE OF INCREMENT AND USE THAT TO DISPLAY THE VARIOUS TEXT AND RECEIVE INPUTS FROM USER
     # THEN I CAN GET INTO THE GAME LOOP, ONCE I COLLECT THE REQUIRED INFORMATION
-    keyStrokesList = []
-    numPlayers = 0
-    worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
     
     windowSurface.fill(BACKGROUNDCOLOR)
-    drawText('Next Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
+    drawText('TURN 1 CYCLE', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
     # drawText('Enter Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
     # BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
     # testString = waitForReturn(testString)
@@ -122,35 +140,6 @@ while True:
     
     pygame.display.update()
     mainClock.tick(FPS)
-
-'''
-    self.titleFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 48)
-    self.gameFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
-    self.keyStrokesList = []
-    self.titleText = "PYTHON GALAXY!"
-    self.numPlayerText = "HOW MANY PLAYERS (1-20)?"
-    self.numWorldsText = "HOW MANY WORLDS (5-40)?"
-    self.numTurnsText = "HOW MANY YEARS (TURNS) IN THE GAME (1-100)?"
-    self.neutralBuildText = "DO YOU WANT THE NEUTRAL WORLDS TO BUILD DEFENSIVE SHIPS?"
-    self.playerNameText = ["FLEET ADMIRAL ", " WILL BEGIN THE GAME IN CONTROL OF WORLD:(", ")", "WHAT NAME WILL THIS FLEET ADMIRAL USE (1 TO 8 CHARACTERS)?"]
-    self.universeCreateText = "PLEASE WAIT WHILE I CREATE THE UNIVERSE"
-    self.askNewSetupText = "NEW SETUP?"
-    self.universeReCreateText = "PLEASE WAIT WHILE I REARRANGE THE STARS"
-    self.gameSetupText = "NOW WAIT WHILE I SETUP THE GAME"
-    self.worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
-    self.configureGame = 0
-    self.numPlayers = 0
-    self.numWorlds = 0
-    self.numTurns = 0
-    self.neutralBuild = -1
-    self.newSetup = 0
-    self.playerCount = 1
-    self.playerNames = []
-    self.worldLocations = dict() # occupied worlds and their locations on the star map
-    self.playerWorlds = [] # might not need if i cna just use worldlist
-    self.universeTitle = "*************** STAR MAP **************"
-    self.universeMap = []
-'''
 
 '''
 # From Statements
@@ -175,6 +164,7 @@ class GalaxyApp(wx.App):
 app = GalaxyApp(redirect=False)
 app.MainLoop()
 '''
+
 '''
 import pygame, os, sys, string
 from pygame.locals import *
