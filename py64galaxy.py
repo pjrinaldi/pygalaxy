@@ -9,6 +9,7 @@ WINDOWHEIGHT = 480
 BACKGROUNDCOLOR = (0, 0, 0)
 TEXTCOLOR = (171, 171, 171)
 FPS = 40
+BLINKER = True
 
 def terminate():
     pygame.quit()
@@ -20,11 +21,16 @@ def drawText(text, font, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
-def drawInputCursor(surface, x, y):
+def blinkInputCursor(isBlink, surface, x, y):
     textobj = font.render(" ", 1, TEXTCOLOR, TEXTCOLOR)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
+    isBlink = not isBlink
+    if isBlink:
+        surface.blit(textobj, textrect)
+    pygame.display.update(textrect)
+    pygame.time.wait(500)
+    return isBlink
 
 def waitForKeyPress():
     while True:
@@ -58,7 +64,6 @@ font = pygame.font.Font("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
 # show the "Start" screen
 drawText('Python Galaxy', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
 drawText('Press a key to start.', font, windowSurface, (WINDOWWIDTH / 3) - 30, (WINDOWHEIGHT / 3) + 50)
-drawInputCursor(windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3) + 50)
 pygame.display.update()
 waitForKeyPress()
 
@@ -68,6 +73,10 @@ while True:
     numPlayers = 0
     worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
     
+    windowSurface.fill(BACKGROUNDCOLOR)
+    
+    BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+    
     for event in pygame.event.get():
         if event.type == pygame.locals.QUIT:
             terminate()
@@ -75,6 +84,10 @@ while True:
         if event.type == pygame.locals.KEYUP:
             if event.key == pygame.locals.K_ESCAPE:
                 terminate()
+    
+    pygame.display.update()
+    mainClock.tick(FPS)
+
 '''
     self.titleFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 48)
     self.gameFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
