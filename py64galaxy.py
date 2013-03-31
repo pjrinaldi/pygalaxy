@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # import statements
-import pygame, pygame.locals, random, sys
+import pygame, pygame.locals, random, sys, string
 
 # constant variables
 WINDOWWIDTH = 640
@@ -10,7 +10,12 @@ BACKGROUNDCOLOR = (0, 0, 0)
 TEXTCOLOR = (171, 171, 171)
 FPS = 40
 BLINKER = True
+testString = []
+testReturn = ""
 
+# game variables
+
+# functions
 def terminate():
     pygame.quit()
     sys.exit()
@@ -42,6 +47,19 @@ def waitForKeyPress():
                     terminate()
                 return
 
+def waitForReturn(tmpString):
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.locals.KEYUP:
+                if event.key == pygame.locals.K_BACKSPACE:
+                    tmpString = tmpString[0:-1]
+                elif event.key == pygame.locals.K_RETURN:
+                    return string.join(tmpString, "")
+                elif event.key <= 127:
+                    tmpString.append(chr(event.key))
+            
+
+
 # set up pygame, the window, and the mouse cursor
 pygame.init()
 mainClock = pygame.time.Clock()
@@ -67,6 +85,16 @@ drawText('Press a key to start.', font, windowSurface, (WINDOWWIDTH / 3) - 30, (
 pygame.display.update()
 waitForKeyPress()
 
+# BEGIN LOOP SEQUENCE TO COLLECT GAME SETUP INFORAMTION
+windowSurface.fill(BACKGROUNDCOLOR)
+drawText('Enter Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
+BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+pygame.display.update()
+testReturn = waitForReturn(testString)
+print testReturn
+# END LOOP SEQUENCE
+
+
 # Game Loop
 while True:
     
@@ -78,8 +106,11 @@ while True:
     worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
     
     windowSurface.fill(BACKGROUNDCOLOR)
-    
-    BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+    drawText('Next Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
+    # drawText('Enter Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
+    # BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+    # testString = waitForReturn(testString)
+    # print testString
     
     for event in pygame.event.get():
         if event.type == pygame.locals.QUIT:
