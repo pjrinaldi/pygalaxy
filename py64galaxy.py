@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 
 # import statements
-import sys
-
-print sys.path
-import pygame, random, sys
-
-# from statements
-from pygame.locals import *
+import pygame, pygame.locals, random, sys
 
 # constant variables
 WINDOWWIDTH = 640
@@ -26,10 +20,61 @@ def drawText(text, font, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
+def drawInputCursor(surface, x, y):
+    textobj = font.render(" ", 1, TEXTCOLOR, TEXTCOLOR)
+    textrect = textobj.get_rect()
+    textrect.topleft = (x, y)
+    surface.blit(textobj, textrect)
 
+def waitForKeyPress():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.locals.QUIT:
+                terminate()
+            if event.type == pygame.locals.KEYUP:
+                if event.key == pygame.locals.K_ESCAPE: # pressing escape quits
+                    terminate()
+                return
+
+# set up pygame, the window, and the mouse cursor
 pygame.init()
 mainClock = pygame.time.Clock()
+windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+pygame.display.set_caption('Py64Galaxy')
+pygame.mouse.set_visible(False)
 
+# set up fonts
+font = pygame.font.Font("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
+
+# set up sounds
+# gameOverSound = pygame.mixer.Sound('gameover.wav')
+# pygame.mixer.music.load('background.mid')
+
+# set up images
+# playerImage = pygame.image.load('player.png')
+# playerRect = playerImage.get_rect()
+# baddieImage = pygame.image.load('baddie.png')
+
+# show the "Start" screen
+drawText('Python Galaxy', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
+drawText('Press a key to start.', font, windowSurface, (WINDOWWIDTH / 3) - 30, (WINDOWHEIGHT / 3) + 50)
+drawInputCursor(windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3) + 50)
+pygame.display.update()
+waitForKeyPress()
+
+# Game Loop
+while True:
+    keyStrokesList = []
+    numPlayers = 0
+    worldList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "(", ")", "<", ">", "?", "+", "="]
+    
+    for event in pygame.event.get():
+        if event.type == pygame.locals.QUIT:
+            terminate()
+        
+        if event.type == pygame.locals.KEYUP:
+            if event.key == pygame.locals.K_ESCAPE:
+                terminate()
 '''
     self.titleFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 48)
     self.gameFont = ImageFont.truetype("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
