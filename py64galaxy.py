@@ -22,7 +22,8 @@ testString = []
 testReturn = ""
 
 # game variables
-setupVariables = {"numberPlayers": 0, "numberWorlds": 0, "numberTurns": 0, "neutralBuild": -1, "newSetup": 0}
+setupVariables = dict()
+# setupVariables = {"numberPlayers": 0, "numberWorlds": 0, "numberTurns": 0, "neutralBuild": -1, "newSetup": 0}
 # configureGame = 0
 # numberPlayers = 0
 # numberWorlds = 0
@@ -47,15 +48,15 @@ def drawText(text, font, surface, x, y):
     surface.blit(textobj, textrect)
 
 def blinkInputCursor(isBlink, surface, x, y):
-    textobj = font.render(" ", 1, TEXTCOLOR, TEXTCOLOR)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    isBlink = not isBlink
-    if isBlink:
-        surface.blit(textobj, textrect)
-    pygame.display.update(textrect)
-    pygame.time.wait(500)
-    return isBlink
+        textobj = font.render(" ", 1, TEXTCOLOR, TEXTCOLOR)
+        textrect = textobj.get_rect()
+        textrect.topleft = (x, y)
+        isBlink = not isBlink
+        if isBlink:
+            surface.blit(textobj, textrect)
+        pygame.display.update(textrect)
+        pygame.time.wait(500)
+        return isBlink
 
 def waitForKeyPress():
     while True:
@@ -78,12 +79,11 @@ def waitForReturn(tmpString):
                 elif event.key <= 127:
                     tmpString.append(chr(event.key))
             
-def collectInput(tmpString, BLINKER):
+def collectInput(tmpString):
     tmpCharArray = []
     # BEGIN LOOP SEQUENCE TO COLLECT GAME SETUP INFORAMTION
     windowSurface.fill(BACKGROUNDCOLOR)
     drawText(tmpString, font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
-    BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
     pygame.display.update()
     return waitForReturn(tmpCharArray)
     
@@ -91,6 +91,7 @@ def collectInput(tmpString, BLINKER):
 # set up pygame, the window, and the mouse cursor
 pygame.init()
 mainClock = pygame.time.Clock()
+blinkClock = pygame.time.Clock()
 windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 pygame.display.set_caption('Py64Galaxy')
 pygame.mouse.set_visible(False)
@@ -112,10 +113,15 @@ drawText('Python Galaxy', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT 
 drawText('Press a key to start.', font, windowSurface, (WINDOWWIDTH / 3) - 30, (WINDOWHEIGHT / 3) + 50)
 pygame.display.update()
 waitForKeyPress()
-
-# collect setup information
-setupVariables["numberPlayers"] = collectInput(SETUPTEXT[0], BLINKER)
-print setupVariables
+while True:
+    # collect setup information
+    setupVariables["numberPlayers"] = collectInput(SETUPTEXT[0])
+    BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+    blinkClock.tick(FPS)
+    print setupVariables
+    setupVariables["numberWorlds"] = collectInput(SETUPTEXT[1])
+    print setupVariables
+    break
 
 # Game Loop
 while True:
@@ -126,7 +132,7 @@ while True:
     windowSurface.fill(BACKGROUNDCOLOR)
     drawText('TURN 1 CYCLE', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
     # drawText('Enter Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
-    # BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+    BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
     # testString = waitForReturn(testString)
     # print testString
     
