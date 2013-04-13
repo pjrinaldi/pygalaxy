@@ -115,9 +115,11 @@ pygame.display.update()
 waitForKeyPress()
 while True:
     # collect setup information
-    setupVariables["numberPlayers"] = collectInput(SETUPTEXT[0])
     BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
     blinkClock.tick(FPS)
+    setupVariables["numberPlayers"] = collectInput(SETUPTEXT[0])
+    # BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+    # blinkClock.tick(FPS)
     print setupVariables
     setupVariables["numberWorlds"] = collectInput(SETUPTEXT[1])
     print setupVariables
