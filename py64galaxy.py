@@ -3,11 +3,40 @@
 # import statements
 import pygame, pygame.locals, random, sys, string
 
+class BlinkCursor(pygame.sprite.Sprite):
+    def __init__(self, position, color):
+        pygame.sprite.Sprite.__init__(self)
+        self.cursor = font.render(" ", 1, color, color)
+        self.rect = self.cursor.get_rect()
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+    
+    def update(self, position):
+        self.old = self.rect # use old position to place blank filler 
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+
+class TextBox(pygame.sprite.Sprite):
+    def __init__(self, position, text, font, color):
+        pygame.sprite.Sprite.__init__(self)
+        self.text = font.render(text, 1, color)
+        self.rect = self.text.get_rect()
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+        
+    def update(self, position, text, font, color):
+        self.old = self.rect
+        self.text = font.render(text, 1, color)
+        self.rect = self.text.get_rect()
+        self.rect.x = position[0]
+        self.rect.y = position[1]
 # constant variables
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
 BACKGROUNDCOLOR = (0, 0, 0)
 TEXTCOLOR = (171, 171, 171)
+ONTEXTCOLOR = (171, 171, 171)
+OFFTEXTCOLOR = BACKGROUNDCOLOR
 FPS = 40
 BLINKER = True
 SETUPTEXT = ["HOW MANY PLAYERS (1-20)?", "HOW MANY WORLDS (5-40)?", "HOW MANY YEARS (TURNS) IN THE GAME (1-100)?", "DO YOU WANT THE NEUTRAL WORLDS TO BUILD DEFENSIVE SHIPS?", "NEW SETUP?"]
@@ -20,7 +49,6 @@ UNIVERSETITLE = "*************** STAR MAP **************"
 
 testString = []
 testReturn = ""
-
 # game variables
 setupVariables = dict()
 # setupVariables = {"numberPlayers": 0, "numberWorlds": 0, "numberTurns": 0, "neutralBuild": -1, "newSetup": 0}
@@ -60,6 +88,12 @@ def blinkInputCursor(isBlink, surface, x, y):
 
 def waitForKeyPress():
     while True:
+        windowSurface.blit(blankCursor, blinker.rect)
+        pygame.display.update(blinker.rect)
+        pygame.time.wait(500)
+        windowSurface.blit(blinker.cursor, blinker.rect)
+        pygame.display.update(blinker.rect)
+        pygame.time.wait(500)
         for event in pygame.event.get():
             if event.type == pygame.locals.QUIT:
                 terminate()
@@ -74,11 +108,13 @@ def waitForReturn(tmpString):
             if event.type == pygame.locals.KEYUP:
                 if event.key == pygame.locals.K_BACKSPACE:
                     tmpString = tmpString[0:-1]
+                elif event.key == pygame.locals.K_ESCAPE:
+                    terminate()
                 elif event.key == pygame.locals.K_RETURN:
                     return string.join(tmpString, "")
                 elif event.key <= 127:
                     tmpString.append(chr(event.key))
-            
+
 def collectInput(tmpString):
     tmpCharArray = []
     # BEGIN LOOP SEQUENCE TO COLLECT GAME SETUP INFORAMTION
@@ -91,13 +127,35 @@ def collectInput(tmpString):
 # set up pygame, the window, and the mouse cursor
 pygame.init()
 mainClock = pygame.time.Clock()
-blinkClock = pygame.time.Clock()
 windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 pygame.display.set_caption('Py64Galaxy')
 pygame.mouse.set_visible(False)
 
 # set up fonts
 font = pygame.font.Font("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
+
+# setup blinking cursor
+blinker = BlinkCursor((10, 10), ONTEXTCOLOR)
+
+# setup blank cursor surface
+blankCursor = pygame.Surface((blinker.rect.width, blinker.rect.height))
+blankCursor.fill(BACKGROUNDCOLOR)
+
+# set up initial textbox
+textbox = TextBox(((WINDOWWIDTH / 3),(WINDOWHEIGHT / 3)), 'Python Galaxy', font, TEXTCOLOR)
+
+# setup blank text box surface
+blankTextBox = pygame.Surface((textbox.rect.width, textbox.rect.height))
+blankTextBox.fill(BACKGROUNDCOLOR)
+
+# Draw initial text to the screen
+windowSurface.blit(textbox.text, textbox.rect)
+textbox.update(((WINDOWWIDTH / 3) - 30, (WINDOWHEIGHT / 3) + 50), 'Press a Key to Start', font, TEXTCOLOR)
+blinker.update((textbox.rect.x + textbox.rect.width + 10, textbox.rect.y))
+windowSurface.blit(blankCursor, blinker.old)
+# windowSurface.blit(blankTextBox, textbox.old) # this would clear the original text when needed b/w text updates
+windowSurface.blit(textbox.text, textbox.rect)
+
 
 # set up sounds
 # gameOverSound = pygame.mixer.Sound('gameover.wav')
@@ -108,22 +166,17 @@ font = pygame.font.Font("./resources/C64_Pro_Mono_v1.0-STYLE.ttf", 12)
 # playerRect = playerImage.get_rect()
 # baddieImage = pygame.image.load('baddie.png')
 
-# show the "Start" screen
-drawText('Python Galaxy', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
-drawText('Press a key to start.', font, windowSurface, (WINDOWWIDTH / 3) - 30, (WINDOWHEIGHT / 3) + 50)
 pygame.display.update()
 waitForKeyPress()
-while True:
-    # collect setup information
-    # BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
-    # blinkClock.tick(FPS)
-    setupVariables["numberPlayers"] = collectInput(SETUPTEXT[0])
-    # BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
-    # blinkClock.tick(FPS)
-    print setupVariables
-    setupVariables["numberWorlds"] = collectInput(SETUPTEXT[1])
-    print setupVariables
-    break
+
+# collect setup information
+### NEED TO FIGURE OUT HOW TO MOVE THE CURSOR TO THE CORRECT POSITION BASED ON THE TEXT LENGTH AND POSITION + SO MUCH ###
+### NEED TO MODIFY THE SETUP VARIABLES COLLECTINPUT FUNCTION TO BETTER REFLECT THE NEW TEXTBOX CLASS ###
+setupVariables["numberPlayers"] = collectInput(SETUPTEXT[0])
+print setupVariables
+
+setupVariables["numberWorlds"] = collectInput(SETUPTEXT[1])
+print setupVariables
 
 # Game Loop
 while True:
@@ -134,7 +187,7 @@ while True:
     windowSurface.fill(BACKGROUNDCOLOR)
     drawText('TURN 1 CYCLE', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
     # drawText('Enter Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
-    BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
+    # BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
     # testString = waitForReturn(testString)
     # print testString
     
