@@ -30,6 +30,22 @@ class TextBox(pygame.sprite.Sprite):
         self.rect = self.text.get_rect()
         self.rect.x = position[0]
         self.rect.y = position[1]
+
+class UserReHash(pygame.sprite.Sprite):
+    def __init__(self, position, text, font, color):
+        pygame.sprite.Sprite.__init(self)
+        self.text = font.render(text, 1, color)
+        self.rect = self.text.get_rect()
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+
+    def update(self, position, text, font, color):
+        self.old = self.rect
+        self.text = fond.render(text, 1, color)
+        self.rect = self.text.get_rect()
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+
 # constant variables
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
@@ -107,12 +123,20 @@ def waitForReturn(tmpString):
         for event in pygame.event.get():
             if event.type == pygame.locals.KEYUP:
                 if event.key == pygame.locals.K_BACKSPACE:
+                    # also where i would need to rehash the letters typed
+                    # also where i would need to move blink cursor over by this
+                    # new text amount.
                     tmpString = tmpString[0:-1]
                 elif event.key == pygame.locals.K_ESCAPE:
                     terminate()
                 elif event.key == pygame.locals.K_RETURN:
                     return string.join(tmpString, "")
+                    # this is where i would store the value to a variable.
                 elif event.key <= 127:
+                    # here is where i would need to hash the screen with the
+                    # letter typed. then i would need to store it in tmpstring
+                    # also where i would need to move the blink cursor over by
+                    # this text amount.
                     tmpString.append(chr(event.key))
 
 def collectInput(tmpString):
