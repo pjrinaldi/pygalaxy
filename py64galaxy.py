@@ -10,9 +10,9 @@ class BlinkCursor(pygame.sprite.Sprite):
         self.rect = self.cursor.get_rect()
         self.rect.x = position[0]
         self.rect.y = position[1]
-    
+
     def update(self, position):
-        self.old = self.rect # use old position to place blank filler 
+        self.old = self.rect # use old position to place blank filler
         self.rect.x = position[0]
         self.rect.y = position[1]
 
@@ -23,13 +23,14 @@ class TextBox(pygame.sprite.Sprite):
         self.rect = self.text.get_rect()
         self.rect.x = position[0]
         self.rect.y = position[1]
-        
+
     def update(self, position, text, font, color):
         self.old = self.rect
         self.text = font.render(text, 1, color)
         self.rect = self.text.get_rect()
         self.rect.x = position[0]
         self.rect.y = position[1]
+        
 # constant variables
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
@@ -122,7 +123,7 @@ def collectInput(tmpString):
     drawText(tmpString, font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
     pygame.display.update()
     return waitForReturn(tmpCharArray)
-    
+
 
 # set up pygame, the window, and the mouse cursor
 pygame.init()
@@ -183,22 +184,22 @@ while True:
     # CREATE A FUNCTION FOR STARTER INFORMATION.  COLLECTINFO(INCREMENT)
     # AS I COLLECT INFO, INCREMENT THE VALUE OF INCREMENT AND USE THAT TO DISPLAY THE VARIOUS TEXT AND RECEIVE INPUTS FROM USER
     # THEN I CAN GET INTO THE GAME LOOP, ONCE I COLLECT THE REQUIRED INFORMATION
-    
+
     windowSurface.fill(BACKGROUNDCOLOR)
     drawText('TURN 1 CYCLE', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
     # drawText('Enter Text: ', font, windowSurface, (WINDOWWIDTH / 3), (WINDOWHEIGHT / 3))
     # BLINKER = blinkInputCursor(BLINKER, windowSurface, 10, 10)
     # testString = waitForReturn(testString)
     # print testString
-    
+
     for event in pygame.event.get():
         if event.type == pygame.locals.QUIT:
             terminate()
-        
+
         if event.type == pygame.locals.KEYUP:
             if event.key == pygame.locals.K_ESCAPE:
                 terminate()
-    
+
     pygame.display.update()
     mainClock.tick(FPS)
 
@@ -210,8 +211,8 @@ import wx
 import GalaxyFrame
 
 #
-# Main Application Class      
-# Launch MainWindow  
+# Main Application Class
+# Launch MainWindow
 class GalaxyApp(wx.App):
     def OnInit(self):
         frame = GalaxyFrame.GalaxyFrame(None, "Python Galaxy!")
@@ -240,7 +241,7 @@ def  get_key():
             return event.key
         else:
             pass
-        
+
 def ask(screen, question):
     tmpFont = pygame.font.Font('/home/pasquale/projects/py64galaxy/resources/C64_Pro_v1.0-STYLE.ttf', 12)
     tmpText = tmpFont.render(question, True, (235, 235, 235))
@@ -258,7 +259,7 @@ def ask(screen, question):
             current_string.append("_")
         elif inkey <= 127:
             current_string.append(chr(inkey))
-            
+
             return string.join(current_string,"")
 
 def load_image(name, colorkey=None):
@@ -331,7 +332,7 @@ def main():
     comPlayers = 0
     numWorlds = 0
     buildShips = 0
-    LIGHTGRAY= (235, 235, 235)    
+    LIGHTGRAY= (235, 235, 235)
 
 #Main Loop
     while 1:
@@ -354,7 +355,7 @@ def main():
                             print 'new game'
                     if(gameType == 1):
                         print 'figure out how to load an old game much later'
-                        
+
             elif event.type == MOUSEBUTTONDOWN:
                 if(gameStart == 0):
                     gameStart = 1
